@@ -11,9 +11,26 @@ datasource db {
   relationMode = "prisma"
 }
 
-model User {
-    id        String   @id @default(cuid())
-    name      String   
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+model Room {
+  id        String   @id @default(cuid())
+  name     String     @unique
+  admin    String   
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Team {
+  id        Int    @id 
+  name      String    @unique
+  shortName String    @unique
+  flag      String
+  matches   Match[]   
+}
+model Match {
+  id        Int    @id() 
+  link      String
+  teams     Team[]  
+  startTime DateTime
+  endTime   DateTime?  
+  number    Int
 }

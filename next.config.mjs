@@ -8,7 +8,7 @@
 const config = {
   reactStrictMode: true,
   experimental: {
-    appDir: true,
+    appDir: false,
   },
   /**
    * If you have the "experimental: { appDir: true }" setting enabled, then you

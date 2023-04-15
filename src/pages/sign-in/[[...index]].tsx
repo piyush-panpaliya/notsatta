@@ -1,4 +1,4 @@
-import { SignIn } from "@clerk/nextjs/app-beta";
+import { SignIn } from "@clerk/nextjs/";
 
 export default function Page() {
   return (
@@ -6,7 +6,7 @@ export default function Page() {
       <SignIn
         path="/sign-in"
         routing="path"
-        signUpUrl="/sign-up"
+        signUpUrl="/sign-in"
         appearance={{
           layout: {
             logoPlacement: "none",
