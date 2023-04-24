@@ -3,10 +3,12 @@ import {
   SignedIn,
   SignedOut,
   UserButton,
+  useAuth,
   useUser,
 } from "@clerk/nextjs";
 
 import { SignInButton } from "./signin";
+import Link from "next/link";
 
 const TopRightNav = ({ slug }: { slug: string | undefined }) => {
   const {user}=useUser()
@@ -37,11 +39,12 @@ export const LayoutHelper = ({
   children: React.ReactNode;
   slug?: string;
 }) => {
+  const {userId}=useAuth()
   return (
     <div className="flex h-screen w-screen flex-col items-center gap-4 pt-2 sm:pt-[40px] overflow-hidden">
       {/* Header */}
       <div className="flex h-16 w-full items-center justify-between px-4 sm:px-12  ">
-        <p className="text-2xl sm:text-5xl">~Satta</p>
+        <Link href={userId?'/dash':'/'} className="text-2xl sm:text-5xl">~Satta</Link>
         <div className="flex items-center gap-5 sm:gap-8">
           <SignedIn>
               <TopRightNav slug={slug} />

@@ -40,6 +40,6 @@ export default withClerkMiddleware((request: NextRequest) => {
 export const config = { 
   matcher:  [
     '/',
-    '/((?!_next/image|media/|_next/static|favicon.ico).*)',
+    '/((?!_next/image|media/|api/cron|_next/static|favicon.ico).*)',
   ]
 };

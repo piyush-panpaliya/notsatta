@@ -1028,30 +1028,30 @@ const finalmatches=[
 const lastmatch= finalmatches.map(m=>({...m,id:parseInt(m.id),number:parseInt(m.number)}))
 
 
-lastmatch.forEach(async (item,n) => {
-  const team1 = await a.team.findUnique({
-    where: {
-      shortName: item.t1
-    }
-  })
-  const team2 = await a.team.findUnique({
-    where: {
-      shortName: item.t2
-    }
-  })
-  const data = await a.match.create({
-    data: {
-      id:parseInt(item.id),
-      link:item.link,
-      startTime:new Date(item.startTime),
-      teams:{
-        connect:[{id:team1.id},{id:team2.id}]
-      },
-      number:parseInt(item.number),
-    }
-  })
-  console.log(data)
-})
+// lastmatch.forEach(async (item,n) => {
+//   const team1 = await a.team.findUnique({
+//     where: {
+//       shortName: item.t1
+//     }
+//   })
+//   const team2 = await a.team.findUnique({
+//     where: {
+//       shortName: item.t2
+//     }
+//   })
+//   const data = await a.match.create({
+//     data: {
+//       id:parseInt(item.id),
+//       link:item.link,
+//       startTime:new Date(item.startTime),
+//       teams:{
+//         connect:[{id:team1.id},{id:team2.id}]
+//       },
+//       number:parseInt(item.number),
+//     }
+//   })
+//   console.log(data)
+// })
 
 
 const teams=[
@@ -1127,4 +1127,28 @@ const teams=[
   }
 ]
 
+// var fs = require('fs');
+// let abc=[]
+// const awdad =async()=>{
+//   const x =await a.match.findMany()
+//   console.log(x)
+//   fs.writeFile('matches.json',  JSON.stringify(x, null, 4), 'utf8',(err) => {
+//     if (err) {  console.error(err);  return; };
+//     console.log("File has been created");
+// });
 
+// }
+// awdad()
+
+// console.log(new Date().toDateString())
+// const adawd=async()=>{
+//   console.log(await a.cmatch.create({
+//     data:{
+//     matchId:60937,
+//     roomId:'clghyxxsl0000vktw8rjol5ow',
+
+//     }
+//   }))
+// }
+
+// adawd()

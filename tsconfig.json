@@ -40,8 +40,9 @@
     "**/*.cjs",
     "**/*.mjs",
     ".next/types/**/*.ts"
-, "src/app/(core)/sign-in/sso-callback"  ],
+, "src/app/(core)/sign-in/sso-callback", "src/utils/cricket.js"  ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "cron"
   ]
 }

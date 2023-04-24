@@ -17,6 +17,9 @@ export const roomRouter = createTRPCRouter({
           admin:auth.userId,
         },
       })
+      await clerkClient.users.updateUserMetadata(auth.userId, { 
+        publicMetadata: {room:room.id} 
+      })
       return {
         roomInv:  Buffer.from(room.id).toString('base64'),
         roomid: room.id,

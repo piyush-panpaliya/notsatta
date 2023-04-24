@@ -3,8 +3,6 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { clerkClient } from "@clerk/nextjs/server";
 
-
-
 export const userRouter = createTRPCRouter({
   username: protectedProcedure
     .input(z.object({ username: z.string().min(2).max(15) }))

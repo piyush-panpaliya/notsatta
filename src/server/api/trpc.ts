@@ -37,8 +37,6 @@ const t = initTRPC.context<typeof createTRPCContext>().create({
   },
 });
 
-
-
 const isAuthed = t.middleware(({ next, ctx }) => {
   if (!ctx.auth.userId) {
     throw new TRPCError({ code: 'UNAUTHORIZED' })
@@ -46,10 +44,10 @@ const isAuthed = t.middleware(({ next, ctx }) => {
   return next({
     ctx: {
       auth: ctx.auth,
+      prisma: ctx.prisma,
     },
   })
 })
-
 
 export const createTRPCRouter = t.router;
 
