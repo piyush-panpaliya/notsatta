@@ -7,8 +7,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     await res.revalidate('/dash')
     const rooms = await prisma.room.findMany()
-    req.body.forEach(async (match:getMatchType) => {
-      rooms.forEach(async (room) => {        
+    JSON.parse(req.body).forEach(async (match:getMatchType) => {
+      rooms.forEach(async (room) => {  ``
         await prisma.cmatch.create({
           data: {
             matchId: match.id,

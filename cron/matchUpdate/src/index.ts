@@ -13,9 +13,6 @@ export default {
 		ctx: ExecutionContext
 	): Promise<void> {
 		const todayMatch= matches.filter(match=>match.startTime.toDateString()===new Date().toDateString());
-		todayMatch.forEach(async(match)=>{
-			const matchData=await getMatch(match.link)
-		})
 		const fetchedMatch=await Promise.all(todayMatch.map(async(match)=>await getMatch(match.link)))
 		fetch(env.API_URL,{
 			method: 'POST',
