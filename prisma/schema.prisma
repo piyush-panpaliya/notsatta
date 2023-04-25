@@ -1,17 +1,85 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "sqlite"
-    url      = env("DATABASE_URL")
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
 }
 
-model Example {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+enum Status {
+  OPEN
+  LIVE
+  FINISHED
+}
+
+model Room {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  admin     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  cmatches  Cmatch[]
+  users     User[]
+}
+
+model User {
+  id       String  @id
+  username String
+  room     Room?   @relation(fields: [roomId], references: [id], onDelete: SetNull)
+  roomId   String?
+  votes    Vote[]
+
+  @@index([roomId])
+}
+
+model Team {
+  id        Int      @id
+  name      String   @unique
+  shortName String   @unique
+  flag      String
+  matches   Match[]
+  won       Cmatch[]
+}
+
+model Match {
+  id        Int       @id()
+  link      String
+  teams     Team[]
+  startTime DateTime
+  endTime   DateTime?
+  number    Int
+  cmatch    Cmatch[]
+}
+
+model Vote {
+  id       String @id() @default(cuid())
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId   String
+  cmatch   Cmatch @relation(fields: [cmatchId], references: [id], onDelete: Cascade)
+  cmatchId String
+  teamId   Int
+  won      Boolean?
+
+  @@index([userId])
+  @@index([cmatchId])
+  @@index([teamId])
+}
+
+model Cmatch {
+  id       String @id() @default(cuid())
+  match    Match  @relation(fields: [matchId], references: [id])
+  matchId  Int
+  room     Room   @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  roomId   String
+  status   Status @default(OPEN)
+  winner   Team?  @relation(fields: [winnerId], references: [id])
+  winnerId Int?
+  votes    Vote[]
+
+  @@unique([matchId, roomId])
+  @@index([winnerId])
+  @@index([matchId])
+  @@index([roomId])
 }

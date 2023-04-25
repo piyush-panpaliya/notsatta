@@ -1,0 +1,25 @@
+name = "matchlive"
+main = "src/index.ts"
+compatibility_date = "2023-04-22"
+
+kv_namespaces = [
+    { binding = "matchesKV", id = "047c581599ee456d89c16c6e02f9b3b5",preview_id="9e0219faa93440fd9fc2d5f84a9d01e6" },
+]
+
+[vars]
+API_URL = "https://notsatta.co/api/cron/matchLive"
+CRON_SECRET = "pshvaiophai?"
+
+[env.dev]
+name = "dev"
+kv_namespaces = [
+    { binding = "matchesKV", id = "047c581599ee456d89c16c6e02f9b3b5",preview_id="9e0219faa93440fd9fc2d5f84a9d01e6" },
+]
+[env.dev.vars]
+API_URL = "http://localhost:3000/api/cron/matchLive"
+CRON_SECRET = "pshvaiophai?"
+
+
+[triggers]
+crons = [ "*/10 8-19 * * *" ]
+
