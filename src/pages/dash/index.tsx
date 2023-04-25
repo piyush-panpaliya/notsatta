@@ -81,10 +81,13 @@ const Dash = ({matches}:{matches:Match[]}) => {
 }
 
 export async function getStaticProps() {
+  const tomorrow  = new Date(); 
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  tomorrow.setHours(1,0,0,0)
   const matches=await prisma.match.findMany({
     where:{
       startTime:{
-        gt:new Date(),
+        gte:tomorrow,
       }
     },
     include:{

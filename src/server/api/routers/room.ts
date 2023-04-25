@@ -17,8 +17,13 @@ export const roomRouter = createTRPCRouter({
           admin:auth.userId,
         },
       })
-      await clerkClient.users.updateUserMetadata(auth.userId, { 
+      const newuser = await clerkClient.users.updateUserMetadata(auth.userId, { 
         publicMetadata: {room:room.id} 
+      })
+      await prisma.user.upsert({
+        where: { id: newuser.id },
+        update: { roomId: newuser.publicMetadata.room as string },
+        create: { id: auth.userId, roomId: newuser.publicMetadata.room as string,username:"user"}
       })
       return {
         roomInv:  Buffer.from(room.id).toString('base64'),
@@ -38,10 +43,14 @@ export const roomRouter = createTRPCRouter({
       })
 
       if(!room) throw new TRPCError({ code: 'NOT_FOUND' })
-      await clerkClient.users.updateUserMetadata(auth.userId, { 
+      const newuser = await clerkClient.users.updateUserMetadata(auth.userId, { 
         publicMetadata: {room:room.id} 
       })
-      // console.log(await clerkApi.users.updateUser(auth.userId, {room:room.id}))
+      await prisma.user.upsert({
+        where: { id: newuser.id },
+        update: { roomId: newuser.publicMetadata.room as string },
+        create: { id: auth.userId, roomId: newuser.publicMetadata.room as string,username:"user"}
+      })
       return room
     }),
   leave: protectedProcedure
@@ -57,6 +66,10 @@ export const roomRouter = createTRPCRouter({
       })
       if(!room) throw new TRPCError({ code: 'NOT_FOUND' })
       console.log(await clerkClient.users.updateUser(auth.userId, { publicMetadata: {room:room.id} }))
+      await prisma.user.update({
+        where: { id: auth.userId },
+        data: { roomId: null }
+      })
       return room
     }),
   get: protectedProcedure

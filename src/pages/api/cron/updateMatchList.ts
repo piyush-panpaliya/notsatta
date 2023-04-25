@@ -10,7 +10,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const rooms = await prisma.room.findMany()
     let data:cmatchCreate= []
-    req.body.forEach(async (match: getMatchType) => {
+    const reqData= typeof req.body==='string'?JSON.parse(req.body):req.body
+    reqData.forEach(async (match: getMatchType) => {
       rooms.forEach(async (room) => {
         data.push({matchId:match.id,roomId:room.id})
       })

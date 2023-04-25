@@ -60,7 +60,9 @@ export const matchRouter = createTRPCRouter({
           include: {
             teams: true,
           }
-        }
+        },
+        votes: true,
+        winner: true
       }
     })
     return cmatches

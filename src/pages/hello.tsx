@@ -10,7 +10,7 @@ const Hello = () => {
   const {user}= useUser()
   const router = useRouter()
 
-  const {data,error,isError,isLoading,mutateAsync:joinRoom}=api.room.join.useMutation()
+  const {mutateAsync:joinRoom}=api.room.join.useMutation({onSuccess:()=>router.push('/dash')})
   const {mutateAsync:updateUsername}=api.user.username.useMutation()
   const {mutateAsync}=api.room.create.useMutation()
 

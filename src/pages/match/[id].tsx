@@ -20,8 +20,11 @@ const Match = () => {
   if(!matchId) return null
   const {data:cmatch}=api.match.getcmatch.useQuery({inpMatchId:matchId })
   return (
-    <div className='flex gap-4'> 
+    <div className='flex flex-col justify-center grow w-full items-center gap-4'> 
+      <div className='flex gap-4'> 
       {cmatch && cmatch.match.teams.map(team=><TeamDiv matchId={matchId} team={team}/>)}
+      </div>
+      {cmatch && cmatch.votes.map(vote=><p>{vote.teamId}</p>)}
     </div>
   )
 }

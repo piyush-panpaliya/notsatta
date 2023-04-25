@@ -13,5 +13,10 @@ export const userRouter = createTRPCRouter({
           username:input.username
         } 
       })
+      await prisma.user.upsert({
+        where: { id: user.id },
+        update: { username: input.username },
+        create: { id: auth.userId, username: user.publicMetadata.username as string }
+      })
     }),
 })

@@ -60,6 +60,7 @@ model Vote {
   cmatch   Cmatch @relation(fields: [cmatchId], references: [id], onDelete: Cascade)
   cmatchId String
   teamId   Int
+  won      Boolean?
 
   @@index([userId])
   @@index([cmatchId])
