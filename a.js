@@ -4,12 +4,7 @@ const a = new PrismaClient({
   log: ["query", "error", "warn"]
 });
 
-// team.forEach(async (item) => {
-//   const data = await a.team.create({
-//     data: item
-//   })
-//   console.log(data)
-// })
+
 
 // a.forEach(i=>(console.log({time:i.children[0].children[0].innerText,t1:i.children[0].children[1].children[0].innerText,t2:i.children[0].children[1].children[1].innerText})))
 
@@ -1028,104 +1023,116 @@ const finalmatches=[
 const lastmatch= finalmatches.map(m=>({...m,id:parseInt(m.id),number:parseInt(m.number)}))
 
 
-// lastmatch.forEach(async (item,n) => {
-//   const team1 = await a.team.findUnique({
-//     where: {
-//       shortName: item.t1
-//     }
-//   })
-//   const team2 = await a.team.findUnique({
-//     where: {
-//       shortName: item.t2
-//     }
-//   })
-//   const data = await a.match.create({
+lastmatch.forEach(async (item,n) => {
+  const team1 = await a.team.findUnique({
+    where: {
+      shortName: item.t1
+    }
+  })
+  const team2 = await a.team.findUnique({
+    where: {
+      shortName: item.t2
+    }
+  })
+  const data = await a.match.create({
+    data: {
+      id:parseInt(item.id),
+      link:item.link,
+      startTime:new Date(item.startTime),
+      teams:{
+        connect:[{id:team1.id},{id:team2.id}]
+      },
+      number:parseInt(item.number),
+    }
+  })
+  console.log(data)
+})
+
+
+// const teams=[
+//   {
+//     id: '123214',
+//     name: 'Lucknow Super Giants',
+//     shortName: 'LSG',
+//     flag: 'https://static.sportskeeda.com/cricket_widget/lucknow-super-giants.png',
+//     slug: 'lucknow-super-giants'
+//   },
+//   {
+//     id: '123216',
+//     name: 'Gujarat Titans',
+//     shortName: 'GT',
+//     flag: 'https://static.sportskeeda.com/cricket_widget/gujarat-titans.png',
+//     slug: 'gujarat-titans'
+//   },
+//   {
+//     id: '591',
+//     name: 'Kolkata Knight Riders',
+//     shortName: 'KKR',
+//     flag: 'https://static.sportskeeda.com/cricket_widget/kolkata-knight-riders.png',
+//     slug: 'kolkata-knight-riders'
+//   },
+//   {
+//     id: '593',
+//     name: 'Mumbai Indians',
+//     shortName: 'MI',
+//     flag: 'https://static.sportskeeda.com/cricket_widget/mumbai-indians.png',
+//     slug: 'mumbai-indians'
+//   },
+//   {
+//     id: '610',
+//     name: 'Chennai Super Kings',
+//     shortName: 'CSK',
+//     flag: 'https://static.sportskeeda.com/cricket_widget/chennai-super-kings.png',
+//     slug: 'chennai-super-kings'
+//   },
+//   {
+//     id: '612',
+//     name: 'Delhi Capitals',
+//     shortName: 'DC',
+//     flag: 'https://static.sportskeeda.com/cricket_widget/delhi-daredevils.png',
+//     slug: 'delhi-daredevils'
+//   },
+//   {
+//     id: '627',
+//     name: 'Punjab Kings',
+//     shortName: 'PBKS',
+//     flag: 'https://static.sportskeeda.com/cricket_widget/kings-xi-punjab.png',
+//     slug: 'kings-xi-punjab'
+//   },
+//   {
+//     id: '629',
+//     name: 'Rajasthan Royals',
+//     shortName: 'RR',
+//     flag: 'https://static.sportskeeda.com/cricket_widget/rajasthan-royals.png',
+//     slug: 'rajasthan-royals'
+//   },
+//   {
+//     id: '646',
+//     name: 'Royal Challengers Bangalore',
+//     shortName: 'RCB',
+//     flag: 'https://static.sportskeeda.com/cricket_widget/royal-challengers-bangalore.png',
+//     slug: 'royal-challengers-bangalore'
+//   },
+//   {
+//     id: '658',
+//     name: 'Sunrisers Hyderabad',
+//     shortName: 'SRH',
+//     flag: 'https://static.sportskeeda.com/cricket_widget/sunrisers-hyderabad.png',
+//     slug: 'sunrisers-hyderabad'
+//   }
+// ]
+
+// teams.forEach(async (item) => {
+//   const data = await a.team.create({
 //     data: {
+//       flag:item.flag,
 //       id:parseInt(item.id),
-//       link:item.link,
-//       startTime:new Date(item.startTime),
-//       teams:{
-//         connect:[{id:team1.id},{id:team2.id}]
-//       },
-//       number:parseInt(item.number),
+//       name:item.name,
+//       shortName:item.shortName,
 //     }
 //   })
 //   console.log(data)
 // })
-
-
-const teams=[
-  {
-    id: '123214',
-    name: 'Lucknow Super Giants',
-    shortName: 'LSG',
-    flag: 'https://static.sportskeeda.com/cricket_widget/lucknow-super-giants.png',
-    slug: 'lucknow-super-giants'
-  },
-  {
-    id: '123216',
-    name: 'Gujarat Titans',
-    shortName: 'GT',
-    flag: 'https://static.sportskeeda.com/cricket_widget/gujarat-titans.png',
-    slug: 'gujarat-titans'
-  },
-  {
-    id: '591',
-    name: 'Kolkata Knight Riders',
-    shortName: 'KKR',
-    flag: 'https://static.sportskeeda.com/cricket_widget/kolkata-knight-riders.png',
-    slug: 'kolkata-knight-riders'
-  },
-  {
-    id: '593',
-    name: 'Mumbai Indians',
-    shortName: 'MI',
-    flag: 'https://static.sportskeeda.com/cricket_widget/mumbai-indians.png',
-    slug: 'mumbai-indians'
-  },
-  {
-    id: '610',
-    name: 'Chennai Super Kings',
-    shortName: 'CSK',
-    flag: 'https://static.sportskeeda.com/cricket_widget/chennai-super-kings.png',
-    slug: 'chennai-super-kings'
-  },
-  {
-    id: '612',
-    name: 'Delhi Capitals',
-    shortName: 'DC',
-    flag: 'https://static.sportskeeda.com/cricket_widget/delhi-daredevils.png',
-    slug: 'delhi-daredevils'
-  },
-  {
-    id: '627',
-    name: 'Punjab Kings',
-    shortName: 'PBKS',
-    flag: 'https://static.sportskeeda.com/cricket_widget/kings-xi-punjab.png',
-    slug: 'kings-xi-punjab'
-  },
-  {
-    id: '629',
-    name: 'Rajasthan Royals',
-    shortName: 'RR',
-    flag: 'https://static.sportskeeda.com/cricket_widget/rajasthan-royals.png',
-    slug: 'rajasthan-royals'
-  },
-  {
-    id: '646',
-    name: 'Royal Challengers Bangalore',
-    shortName: 'RCB',
-    flag: 'https://static.sportskeeda.com/cricket_widget/royal-challengers-bangalore.png',
-    slug: 'royal-challengers-bangalore'
-  },
-  {
-    id: '658',
-    name: 'Sunrisers Hyderabad',
-    shortName: 'SRH',
-    flag: 'https://static.sportskeeda.com/cricket_widget/sunrisers-hyderabad.png',
-    slug: 'sunrisers-hyderabad'
-  }
-]
 
 // var fs = require('fs');
 // let abc=[]

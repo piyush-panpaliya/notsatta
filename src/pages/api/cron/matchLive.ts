@@ -19,7 +19,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           status: "LIVE"
         }
       })
-      return res.status(200)
+      return res.status(200).send('Match is live')
     }
     if (fetchedMatch.status === 'FINISHED') {
       await prisma.cmatch.updateMany({
@@ -32,7 +32,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
       })
       //leaderboard update
-      return res.status(200)
+      return res.status(200).send('Match finished')
     }
   } catch (err) {
     console.log(err)
