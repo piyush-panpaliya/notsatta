@@ -3,8 +3,8 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { Base64 } from 'js-base64';
 import { clerkClient } from "@clerk/nextjs/server";
-
-
+import matches from '~/utils/matches'
+import { getMatch } from "~/utils/cricket";
 
 export const roomRouter = createTRPCRouter({
   create: protectedProcedure
@@ -24,6 +24,14 @@ export const roomRouter = createTRPCRouter({
         where: { id: newuser.id },
         update: { roomId: newuser.publicMetadata.room as string },
         create: { id: auth.userId, roomId: newuser.publicMetadata.room as string, username: "user" }
+      })
+      const todayMatch = matches.filter(match => match.startTime.toDateString() === new Date().toDateString());
+      const fetchedMatch = await Promise.all(todayMatch.map(async (match) => await getMatch(match.link)))
+      console.log(fetchedMatch)
+      await fetch(`${process.env.VERCEL_URL}/api/cron/updateMatchList`, {
+        headers: { secret: process.env.CRON_KEY as string },
+        method: 'POST',
+        body: JSON.stringify(fetchedMatch)
       })
       return {
         roomInv: Buffer.from(room.id).toString('base64'),
@@ -74,10 +82,11 @@ export const roomRouter = createTRPCRouter({
     }),
   get: protectedProcedure
     .query(async ({ ctx: { auth, prisma } }) => {
-      if (!(auth.user?.publicMetadata?.room)) throw new TRPCError({ code: 'FORBIDDEN' })
+      const roomId = (await clerkClient.users.getUser(auth.userId)).publicMetadata?.room as string | undefined
+      if (!roomId) throw new TRPCError({ code: 'FORBIDDEN' })
       const room = await prisma.room.findUnique({
         where: {
-          id: auth.user.publicMetadata.room.toString(),
+          id: roomId.toString(),
         },
       })
       if (!room) throw new TRPCError({ code: 'NOT_FOUND' })

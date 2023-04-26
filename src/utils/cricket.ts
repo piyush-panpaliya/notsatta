@@ -9,7 +9,6 @@ interface FetchedTeam {
 type Status = "pre" | "live" | "post";
 
 const getStatus = (status: Status) => {
-  console.log(status)
   switch (status) {
     case "pre":
       return "OPEN"

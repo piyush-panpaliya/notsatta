@@ -18,7 +18,6 @@ export const matchRouter = createTRPCRouter({
         },
         select: { id: true, name: true }
       })
-      console.log(room)
       if (!room) throw new TRPCError({ code: 'NOT_FOUND' })
       const today = new Date()
       today.setHours(14, 0, 0, 0);
@@ -36,6 +35,31 @@ export const matchRouter = createTRPCRouter({
             { match: { startTime: { gte: today } } },
             { match: { startTime: { lte: tomorrow } } },
           ]
+        },
+        include: {
+          match: {
+            include: {
+              teams: true,
+            }
+          }
+        }
+      })
+      return cmatches
+    }),
+  getallcmatches: protectedProcedure
+    .query(async ({ ctx: { auth, prisma } }) => {
+      const user = await clerkClient.users.getUser(auth.userId)
+      if (!user.publicMetadata?.room) throw new TRPCError({ code: 'FORBIDDEN' })
+      const room = await prisma.room.findUnique({
+        where: {
+          id: user.publicMetadata?.room as string,
+        },
+        select: { id: true, name: true }
+      })
+      if (!room) throw new TRPCError({ code: 'NOT_FOUND' })
+      const cmatches = await prisma.cmatch.findMany({
+        where: {
+          roomId: room.id,
         },
         include: {
           match: {

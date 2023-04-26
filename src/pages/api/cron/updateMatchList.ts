@@ -18,11 +18,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         data.push({ matchId: match.id, roomId: room.id })
       })
     })
-    console.log(data)
-    await prisma.cmatch.createMany({
+    const cmatches = await prisma.cmatch.createMany({
       data,
       skipDuplicates: true
     })
+    console.log(cmatches)
     return res.json({ revalidated: true })
   } catch (err) {
     console.log(err)
