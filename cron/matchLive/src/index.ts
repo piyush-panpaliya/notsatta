@@ -27,28 +27,31 @@ export default {
 		controller: ScheduledController,
 		env: Env,
 		ctx: ExecutionContext
-		): Promise<void> {
-		const todayMatch= matches.filter(match=>match.startTime.toDateString()===new Date().toDateString());
-		todayMatch.forEach(async(match)=>{
-			const matchData=await getMatch(match.link)
+	): Promise<void> {
+		const yesterday = new Date();
+		yesterday.setDate(yesterday.getDate() + 1);
+		const todayMatch = matches.filter(match => match.startTime.toDateString() === yesterday.toDateString());
+		todayMatch.forEach(async (match) => {
+			const matchData = await getMatch(match.link)
 			console.log(matchData)
-			if(matchData.status==='LIVE' ){
-			// if(matchData.status==='LIVE' && await env.matchesKV.get(match.id.toString())!=='LIVE'){
-				fetch(env.API_URL,{
+			console.log(match.link)
+			if (matchData.status === 'LIVE') {
+				// if(matchData.status==='LIVE' && await env.matchesKV.get(match.id.toString())!=='LIVE'){
+				fetch(env.API_URL, {
 					method: 'POST',
-					body:JSON.stringify(matchData),
+					body: JSON.stringify(matchData),
 					headers: {
-						secret:env.CRON_SECRET,
+						secret: env.CRON_SECRET,
 					}
 				})
 			}
-			if(matchData.status==='FINISHED' ){
-			// if(matchData.status==='FINISHED' && await env.matchesKV.get(match.id.toString())!=='FINISHED'){
-				fetch(env.API_URL,{
+			if (matchData.status === 'FINISHED') {
+				// if(matchData.status==='FINISHED' && await env.matchesKV.get(match.id.toString())!=='FINISHED'){)
+				fetch(env.API_URL, {
 					method: 'POST',
-					body:JSON.stringify(matchData),
+					body: JSON.stringify(matchData),
 					headers: {
-						secret:env.CRON_SECRET,
+						secret: env.CRON_SECRET,
 					}
 				})
 			}

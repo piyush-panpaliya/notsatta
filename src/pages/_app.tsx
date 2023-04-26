@@ -4,7 +4,7 @@ import { LayoutHelper } from '~/components/layout-helper';
 import { dark } from '@clerk/themes';
 import { api } from "~/utils/api";
 import "~/styles/globals.css";
-
+import Head from 'next/head'
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -16,6 +16,9 @@ function MyApp({ Component, pageProps }: AppProps) {
       <LayoutHelper>
         <Component {...pageProps} />
       </LayoutHelper>
+      <Head>
+        <title>~Satta</title>
+      </Head>
     </ClerkProvider>
   );
 }
