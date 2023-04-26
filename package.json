@@ -12,6 +12,7 @@
   "dependencies": {
     "@clerk/nextjs": "^4.16.2",
     "@clerk/themes": "^1.6.1",
+    "@cred/neopop-web": "^1.0.0",
     "@prisma/client": "^4.13.0",
     "@tanstack/react-query": "^4.28.0",
     "@trpc/client": "^10.18.0",
@@ -23,8 +24,8 @@
     "next": "^13.3.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "styled-components": "^5.3.10",
     "superjson": "1.12.2",
-    "vercel": "^28.18.5",
     "zod": "^3.21.4"
   },
   "devDependencies": {

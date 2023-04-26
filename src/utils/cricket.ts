@@ -8,7 +8,7 @@ interface FetchedTeam {
 
 type Status = "pre" | "live" | "post";
 
-const getStatus= (status: Status) => {
+const getStatus = (status: Status) => {
   switch (status) {
     case "pre":
       return "OPEN"
@@ -23,8 +23,7 @@ export const getMatch = async (link: string) => {
   const response = await fetch(link);
   const data = await response.json() as any;
 
-  const winner = data.winner_team !=='' ? teamNametoId(data.winner_team) : 0 as number;
-  
+  const winner = data.winner_team !== '' ? teamNametoId(data.winner_team) : 0 as number;
   const fetchedMatch = {
     teams: data.score_strip.map((team: any) => {
       return {
@@ -41,7 +40,7 @@ export const getMatch = async (link: string) => {
     inPlay: data.in_play as boolean,
     slug: data.topic_slug as string,
     winner: winner,
-    status:getStatus(data.match_status) as ReturnType<typeof getStatus>,
+    status: getStatus(data.match_status) as ReturnType<typeof getStatus>,
   }
   return fetchedMatch;
 }
@@ -57,7 +56,7 @@ const teamNametoId = (teamName: string) => {
     { name: "Sunrisers Hyderabad", id: 658 },
     { name: "Punjab Kings", id: 627 },
     { name: "Lucknow Super Giants", id: 123214 },
-    { name: "Gujarat Titans", id: 12321 },
+    { name: "Gujarat Titans", id: 123216 },
   ]
   return dict.find((team) => team.name === teamName)?.id as number;
 }
