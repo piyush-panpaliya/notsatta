@@ -26,17 +26,20 @@ const TeamDiv = ({ team }: { team: Team }) => {
 const PutVote = ({ refetch, cmatch, vote }: any) => {
   const router = useRouter();
   const { id: matchId } = router.query;
-  const { mutateAsync } = api.match.vote.putVote.useMutation({
+  const { mutateAsync, isLoading } = api.match.vote.putVote.useMutation({
     onSuccess: refetch,
   });
   if (!matchId) return null;
   return cmatch.match.teams.map((team: Team) => (
     <button
       key={team.id}
+      disabled={isLoading}
       onClick={() => {
         mutateAsync({ inpMatchId: matchId as string, voteTeam: team.id });
       }}
-      className="w-1/2 bg-white py-4 text-black"
+      className={`w-1/2  py-4 text-black bg-${
+        isLoading ? 'gray-400' : 'white'
+      }`}
     >
       {team.shortName}
     </button>
@@ -118,14 +121,17 @@ const Match = () => {
     const id = setInterval(async () => {
       const response = await fetch(cmatch?.match.link);
       const ma = (await response.json()) as any;
-      if (ma['match_status'] === 'post') {
+      if (
+        ma['match_status'] == 'post' ||
+        (ma['match_status'] == 'live' && cmatch.status === 'OPEN')
+      ) {
         fetch(`${getBaseUrl()}/api/cron/matchLive`, {
           body: JSON.stringify(cmatch?.match),
           method: 'POST',
         });
       }
       setFmatch(ma);
-    }, 3000);
+    }, 5000);
     return () => clearInterval(id);
   }, [cmatch]);
   if (!matchId) return null;

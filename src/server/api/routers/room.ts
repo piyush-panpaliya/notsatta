@@ -35,8 +35,7 @@ export const roomRouter = createTRPCRouter({
         body: JSON.stringify(fetchedMatch)
       })
       todayMatch.forEach(async (match) => {
-        await fetch(`${process.env.VERCEL_URL}/api/cron/matchLive`, {
-          headers: { secret: process.env.CRON_KEY as string },
+        await fetch(`${getBaseUrl()}/api/cron/matchLive`, {
           method: 'POST',
           body: JSON.stringify(match)
         })
