@@ -4,7 +4,13 @@ import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { api } from '~/utils/api';
 
-const RoomDiv = ({ setScreen }: { setScreen: any }) => {
+const RoomDiv = ({
+  setScreen,
+  roomState,
+}: {
+  setScreen: any;
+  roomState: any;
+}) => {
   const router = useRouter();
   const {
     mutateAsync: joinRoom,
@@ -13,7 +19,6 @@ const RoomDiv = ({ setScreen }: { setScreen: any }) => {
   } = api.room.join.useMutation({
     onSuccess: () => router.push({ pathname: '/dash', query: { nocheck: 1 } }),
   });
-  const [roomName, setRoomName] = useState('');
   // const { mutateAsync } = api.room.create.useMutation();
   return (
     <div className="mt-10 flex h-full w-full grow flex-col items-center justify-between pb-[20vh] sm:mt-[10vh]">
@@ -42,8 +47,8 @@ const RoomDiv = ({ setScreen }: { setScreen: any }) => {
             placeholder="enter a pre-existing room invite"
             id="roomName"
             autoFocus={false}
-            value={roomName}
-            onChange={(e: any) => setRoomName(e.target.value)}
+            value={roomState.roomName}
+            onChange={(e: any) => roomState.setRoomName(e.target.value)}
             style={{
               border: '1px solid white',
               padding: '1rem 1rem 1rem 1rem',
@@ -62,7 +67,7 @@ const RoomDiv = ({ setScreen }: { setScreen: any }) => {
             errorMessage={error ? error.shape?.message : ''}
           />
           <p className="mt-2 text-[#8A8A8A]">
-            enter the link you recieved to enter the room
+            enter the room token you recieved to enter the room
           </p>
         </div>
       </div>
@@ -71,12 +76,12 @@ const RoomDiv = ({ setScreen }: { setScreen: any }) => {
         colorMode="light"
         size="big"
         onClick={() => {
-          joinRoom({ slug: roomName });
+          joinRoom({ slug: roomState.roomName });
         }}
         fullWidth
         showArrow
         spacingConfig={{ padding: '1rem 0 1rem 0' }}
-        disabled={isLoading || roomName.length < 2}
+        disabled={isLoading || roomState.roomName.length < 2}
       >
         <p className="text-2xl sm:text-4xl">continue</p>
       </Button>

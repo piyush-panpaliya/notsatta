@@ -28,9 +28,7 @@ export default {
 		env: Env,
 		ctx: ExecutionContext
 	): Promise<void> {
-		const yesterday = new Date();
-		yesterday.setDate(yesterday.getDate() + 1);
-		const todayMatch = matches.filter(match => match.startTime.toDateString() === yesterday.toDateString());
+		const todayMatch = matches.filter(match => match.startTime.toDateString() === new Date().toDateString());
 		todayMatch.forEach(async (match) => {
 			const matchData = await getMatch(match.link)
 			console.log(matchData)

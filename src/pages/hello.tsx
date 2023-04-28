@@ -2,12 +2,15 @@ import { useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import NewRoomDiv from '~/components/hello/NewRoomDiv';
+import RoomCreated from '~/components/hello/RoomCreated';
 import RoomDiv from '~/components/hello/RoomDiv';
 import UsernameDiv from '~/components/hello/UserNameDiv';
 
 const Hello = () => {
   const { user, isLoaded } = useUser();
   const router = useRouter();
+  const { query } = router;
+  const [roomName, setRoomName] = useState('');
 
   const moveToNextScreen = () => {
     user?.publicMetadata.room ? router.push('/dash') : setComponent('RoomDiv');
@@ -15,12 +18,20 @@ const Hello = () => {
   const [component, setComponent] = useState(
     user?.publicMetadata.room ? 'RoomDiv' : 'UsernameDiv'
   );
+  const [shared, setShared] = useState(null);
 
   useEffect(() => {
-    if (user?.publicMetadata.room && user?.publicMetadata.username) {
+    if (
+      user?.publicMetadata.room &&
+      user?.publicMetadata.username &&
+      component !== 'RoomCreated'
+    ) {
       router.push('/dash');
     }
-  }, [user]);
+    if (query?.inv && component !== 'RoomDiv') {
+      setRoomName(query.inv as string);
+    }
+  }, [user, component, query?.inv]);
 
   if (!isLoaded) return <p>loading...</p>;
   return (
@@ -34,8 +45,18 @@ const Hello = () => {
         {component === 'UsernameDiv' && (
           <UsernameDiv nextScreen={moveToNextScreen} />
         )}
-        {component === 'RoomDiv' && <RoomDiv setScreen={setComponent} />}
-        {component === 'NewRoomDiv' && <NewRoomDiv setScreen={setComponent} />}
+        {component === 'RoomDiv' && (
+          <RoomDiv
+            roomState={{ roomName, setRoomName }}
+            setScreen={setComponent}
+          />
+        )}
+        {component === 'NewRoomDiv' && (
+          <NewRoomDiv setScreen={setComponent} setShared={setShared} />
+        )}
+        {component === 'RoomCreated' && (
+          <RoomCreated setScreen={setComponent} roomResponse={shared} />
+        )}
       </div>
     </div>
   );

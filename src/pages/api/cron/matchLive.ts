@@ -3,10 +3,8 @@ import { prisma } from "~/server/db";
 import { getMatch } from "~/utils/cricket";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.headers.secret !== process.env.CRON_KEY) return res.status(401).json({ error: "Unauthorized" })
   try {
-    console.log(req.body)
-    console.log(typeof req.body)
+    if (req.method !== 'POST') return res.status(404).json({ error: "yaha na aaye" })
     const reqData = typeof req.body === 'string' ? JSON.parse(req.body) : req.body
     const fetchedMatch = await getMatch(reqData.link)
     console.log('fetchedMatch', fetchedMatch)

@@ -4,7 +4,13 @@ import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { api } from '~/utils/api';
 
-const NewRoomDiv = ({ setScreen }: { setScreen: any }) => {
+const NewRoomDiv = ({
+  setScreen,
+  setShared,
+}: {
+  setScreen: any;
+  setShared: any;
+}) => {
   const [roomName, setRoomName] = useState('');
   const [isChecked, setIsChecked] = useState(false);
   const router = useRouter();
@@ -13,10 +19,13 @@ const NewRoomDiv = ({ setScreen }: { setScreen: any }) => {
     error,
     isLoading,
   } = api.room.create.useMutation({
-    onSuccess: () => router.push({ pathname: '/dash', query: { check: 1 } }),
+    onSuccess: (data: any) => {
+      console.log(data);
+      setShared(data);
+      setScreen('RoomCreated');
+    },
   });
   const handleChange = (event: any) => {
-    console.log(event.target.checked);
     setIsChecked(event.target.checked);
   };
   return (
@@ -51,8 +60,10 @@ const NewRoomDiv = ({ setScreen }: { setScreen: any }) => {
           scrollIntoView={false}
           autoFocus={false}
         />
-        <div className="flex justify-between">
-          <p className="text-2xl">Allow members to invite other people</p>
+        <div className="flex items-center justify-between">
+          <p className="max-w-[75%] text-xl sm:text-2xl">
+            Allow members to invite other people
+          </p>
           <Toggle
             isChecked={isChecked}
             colorConfig={{
