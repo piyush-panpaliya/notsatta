@@ -33,7 +33,34 @@ const RoomDiv = ({
           fullWidth
           spacingConfig={{ padding: '1rem 0 1rem 0' }}
         >
-          <p className="text-2xl sm:text-4xl">create new room</p>
+          <div className="flex gap-4">
+            <svg
+              width="45"
+              height="45"
+              viewBox="0 0 45 45"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M22.1352 44.5706C21.5002 23.7921 20.9811 23.2763 0.202637 22.6381C20.9811 22.0031 21.497 21.484 22.1352 0.705536C22.7701 21.484 23.2892 21.9999 44.0677 22.6381C23.2892 23.2763 22.7734 23.7858 22.1352 44.5706Z"
+                fill="black"
+              />
+            </svg>
+
+            <p className=" text-2xl  sm:text-4xl">create new room</p>
+            <svg
+              width="45"
+              height="45"
+              viewBox="0 0 45 45"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M22.1352 44.5706C21.5002 23.7921 20.9811 23.2763 0.202637 22.6381C20.9811 22.0031 21.497 21.484 22.1352 0.705536C22.7701 21.484 23.2892 21.9999 44.0677 22.6381C23.2892 23.2763 22.7734 23.7858 22.1352 44.5706Z"
+                fill="black"
+              />
+            </svg>
+          </div>
         </Button>
         <div className="relative flex w-full items-center py-5">
           <div className="grow border-t border-gray-400"></div>

@@ -38,7 +38,7 @@ const Hello = () => {
     <div className=" flex w-full grow flex-col items-center ">
       <div className=" flex w-full grow flex-col items-center gap-3 lg:max-w-[768px]">
         <img
-          src="media/waves.svg"
+          src="https://notsattamedia.pages.dev/landing/waves.svg"
           className="absolute -left-20 top-[10vh] z-[-1] h-[75vh] max-w-none opacity-10 lg:left-0 lg:h-auto lg:w-full"
         />
 

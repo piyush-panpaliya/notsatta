@@ -137,9 +137,24 @@ const Match = () => {
   if (!matchId) return null;
   if (cmatchLoading) return <p>...Loading</p>;
   return (
-    <div className="flex w-full grow flex-col items-center justify-between gap-[5vh] py-8 lg:max-w-[768px]">
+    <div className="flex w-full grow flex-col items-center justify-between gap-[3vh] py-8 lg:max-w-[768px]">
       <div className="flex w-full items-center justify-between px-4 py-2">
-        <p onClick={() => router.push('/dash')}>back</p>
+        <span onClick={() => router.push('/dash')}>
+          <svg
+            width="44"
+            height="19"
+            viewBox="0 0 44 19"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M42.5001 9.5H0M0 9.5C4 9.5 9.50011 7 9.50011 1M0 9.5C4 9.5 9.50011 12.0002 9.50011 17.5002"
+              stroke="white"
+              stroke-width="2"
+              stroke-linecap="square"
+            />
+          </svg>
+        </span>
         {cmatch?.match && (
           <p className="text-xl sm:text-2xl">
             {`${
