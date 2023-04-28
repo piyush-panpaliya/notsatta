@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "es2017",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "checkJs": true,
     "skipLibCheck": true,
@@ -22,9 +18,7 @@
     "noUncheckedIndexedAccess": true,
     "baseUrl": ".",
     "paths": {
-      "~/*": [
-        "./src/*"
-      ]
+      "~/*": ["./src/*"]
     },
     "plugins": [
       {
@@ -39,10 +33,9 @@
     "**/*.tsx",
     "**/*.cjs",
     "**/*.mjs",
-    ".next/types/**/*.ts"
-, "src/app/(core)/sign-in/sso-callback", "src/utils/cricket.js"  ],
-  "exclude": [
-    "node_modules",
-    "cron"
-  ]
+    ".next/types/**/*.ts",
+    "src/app/(core)/sign-in/sso-callback",
+    "src/utils/cricket.js"
+  ],
+  "exclude": ["node_modules", "cron", "media"]
 }

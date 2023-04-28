@@ -6,6 +6,8 @@ import { prisma } from '~/server/db';
 import { api } from '~/utils/api';
 import Link from 'next/link';
 
+type PropMatches = { matches: { paMatches: Match[]; upMatches: Match[] } };
+
 const MatchTab = ({ match }: { match: Cmatch }) => {
   return (
     <Link
@@ -32,7 +34,7 @@ export const TeamNames = ({ teams }: { teams: Team[] }) => {
   return (
     <div className="flex grow items-center justify-between px-4  sm:w-full sm:px-8">
       <div className="flex items-center gap-2 sm:flex-col sm:gap-4 ">
-        <img src={teams[0]?.flag} className="h-8 w-8 sm:h-12 sm:w-12" />
+        <img src={teams[0]?.flag} className=" w-8  sm:w-12" />
         <p className="text-lg font-semibold sm:text-3xl">
           {teams[0]?.shortName}
         </p>
@@ -42,7 +44,7 @@ export const TeamNames = ({ teams }: { teams: Team[] }) => {
         <p className="align-center text-lg font-semibold sm:text-3xl">
           {teams[1]?.shortName}
         </p>
-        <img src={teams[1]?.flag} className="h-8 w-8 sm:h-12 sm:w-12" />
+        <img src={teams[1]?.flag} className=" w-8 sm:w-12" />
       </div>
     </div>
   );
@@ -55,7 +57,7 @@ const LiveMatch = () => {
   if (isLoading) return <p>...Loading</p>;
   return (
     <div className="flex w-full flex-col items-center justify-center gap-3 text-center text-black sm:flex-row sm:gap-8">
-      {data && data.map((match) => <MatchTab match={match} />)}
+      {data && data.map((match) => <MatchTab key={match.id} match={match} />)}
     </div>
   );
 };
@@ -71,7 +73,7 @@ const ListMatch = ({ match }: { match: Match }) => {
     >
       <div className="flex grow items-center justify-between px-4  sm:w-full sm:px-8">
         <div className="flex w-[40%] items-center gap-2  sm:gap-4 ">
-          <img src={teams[0]?.flag} className="h-6 w-6 sm:h-12 sm:w-12" />
+          <img src={teams[0]?.flag} className=" w-6 sm:w-12" />
           <p className=" text-sm font-normal sm:text-2xl">
             {teams[0]?.shortName}
           </p>
@@ -81,7 +83,7 @@ const ListMatch = ({ match }: { match: Match }) => {
           <p className=" text-sm font-normal sm:text-2xl">
             {teams[1]?.shortName}
           </p>
-          <img src={teams[1]?.flag} className="h-6 w-6 sm:h-12 sm:w-12" />
+          <img src={teams[1]?.flag} className=" w-6 sm:w-12" />
         </div>
       </div>
       <p>{`${date.getDate()}/${date.getMonth()}`}</p>
@@ -89,20 +91,13 @@ const ListMatch = ({ match }: { match: Match }) => {
   );
 };
 
-const Table = ({ matches }: { matches: Match[] }) => {
+const Table = ({ matches }: PropMatches) => {
   const [show, setShow] = useState<boolean>(false);
-  const [matchesstate, setMatches] = useState<any[]>(matches);
+  const [matchesstate, setMatches] = useState<any[]>(matches.upMatches);
   const [state, setState] = useState<'upcoming' | 'past'>('upcoming');
 
-  const upcomingMatches = matches.filter((match) => {
-    return new Date(match.startTime) > new Date();
-  });
-  const pastMatches = matches.filter(
-    (match) => new Date(match.startTime) < new Date()
-  );
-
   useEffect(() => {
-    setMatches(state === 'upcoming' ? upcomingMatches : pastMatches);
+    setMatches(state === 'upcoming' ? matches.upMatches : matches.paMatches);
   }, [state]);
 
   return (
@@ -121,7 +116,7 @@ const Table = ({ matches }: { matches: Match[] }) => {
           Past Matches
         </p>
       </div>
-      {matches.slice(0, 10).map((match: any) => (
+      {matchesstate.slice(0, 10).map((match: any) => (
         <ListMatch match={match} key={match.id} />
       ))}
       {!show && (
@@ -130,8 +125,8 @@ const Table = ({ matches }: { matches: Match[] }) => {
         </p>
       )}
       {show &&
-        matches
-          .slice(10, matches.length)
+        matchesstate
+          .slice(10, matchesstate.length)
           .map((match: any) => <ListMatch match={match} key={match.id} />)}
       {show && (
         <p onClick={() => setShow(false)} className="min-w-[30px] px-2 py-1">
@@ -142,7 +137,7 @@ const Table = ({ matches }: { matches: Match[] }) => {
   );
 };
 
-const Dash = ({ matches }: { matches: Match[] }) => {
+const Dash = ({ matches }: PropMatches) => {
   const { user } = useUser();
   const router = useRouter();
   const { data } = api.room.get.useQuery(undefined, {
@@ -177,7 +172,7 @@ export async function getStaticProps() {
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
   tomorrow.setHours(1, 0, 0, 0);
-  const matches = await prisma.match.findMany({
+  const upMatches = await prisma.match.findMany({
     where: {
       startTime: {
         gte: tomorrow,
@@ -190,11 +185,32 @@ export async function getStaticProps() {
       startTime: 'asc',
     },
   });
+  const today = new Date();
+  today.setHours(1, 0, 0, 0);
+  const paMatches = await prisma.match.findMany({
+    where: {
+      startTime: {
+        lte: today,
+      },
+    },
+    include: {
+      teams: true,
+    },
+    orderBy: {
+      startTime: 'desc',
+    },
+  });
+  const matchAll = {
+    upMatches: upMatches.map((match) => {
+      return { ...match, startTime: match.startTime.toJSON() };
+    }),
+    paMatches: paMatches.map((match) => {
+      return { ...match, startTime: match.startTime.toJSON() };
+    }),
+  };
   return {
     props: {
-      matches: matches.map((match) => {
-        return { ...match, startTime: match.startTime.toJSON() };
-      }),
+      matches: matchAll,
     },
     revalidate: 10 * 60 * 60,
   };

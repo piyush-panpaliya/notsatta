@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 // Set the paths that don't require the user to be signed in
-const publicPaths = [ "/sign-in*", "/sign-up*","/api/clerkWebhook","/api/cron*"];
+const publicPaths = ["/sign-in*", "/sign-up*"];
 
 const isPublic = (path: string) => {
   return publicPaths.find((x) =>
@@ -17,15 +17,15 @@ export default withClerkMiddleware((request: NextRequest) => {
   }
   // if the user is not signed in redirect them to the sign in page.
   const { userId } = getAuth(request);
-  
-  if(userId && request.nextUrl.pathname === "/") {
+
+  if (userId && request.nextUrl.pathname === "/") {
     const dashUrl = new URL("/dash", request.url)
     return NextResponse.redirect(dashUrl)
   }
-  
+
 
   if (!userId) {
-    if(request.nextUrl.pathname === "/") {
+    if (request.nextUrl.pathname === "/") {
       return NextResponse.next()
     }
     // redirect the users to /pages/sign-in/[[...index]].ts
@@ -36,9 +36,9 @@ export default withClerkMiddleware((request: NextRequest) => {
 });
 
 // Stop Middleware running on static files and public folder
-export const config = { 
-  matcher:  [
+export const config = {
+  matcher: [
     '/',
-    '/((?!_next/image|media/|_next/static|favicon.ico).*)',
+    '/((?!_next/image|media/|_next/static|favicon.ico|api/cron|api/clerkWebhook).*)',
   ]
 };

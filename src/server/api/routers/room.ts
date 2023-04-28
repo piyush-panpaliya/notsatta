@@ -4,6 +4,7 @@ import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { Base64 } from 'js-base64';
 import { clerkClient } from "@clerk/nextjs/server";
 import matches from '~/utils/matches'
+import { getBaseUrl } from "~/utils/api";
 import { getMatch } from "~/utils/cricket";
 
 export const roomRouter = createTRPCRouter({
@@ -28,14 +29,26 @@ export const roomRouter = createTRPCRouter({
       const todayMatch = matches.filter(match => match.startTime.toDateString() === new Date().toDateString());
       const fetchedMatch = await Promise.all(todayMatch.map(async (match) => await getMatch(match.link)))
       console.log(fetchedMatch)
-      await fetch(`${process.env.VERCEL_URL}/api/cron/updateMatchList`, {
+      await fetch(`${getBaseUrl()}/api/cron/updateMatchList`, {
         headers: { secret: process.env.CRON_KEY as string },
         method: 'POST',
         body: JSON.stringify(fetchedMatch)
       })
+      todayMatch.forEach(async (match) => {
+        await fetch(`${getBaseUrl()}/api/cron/matchLive`, {
+          method: 'POST',
+          body: JSON.stringify(match)
+        })
+      })
+      console.log({
+        roomInv: Buffer.from(room.id).toString('base64'),
+        roomid: room.id,
+        name: room.name
+      })
       return {
         roomInv: Buffer.from(room.id).toString('base64'),
         roomid: room.id,
+        name: room.name
       };
     }),
   join: protectedProcedure
@@ -88,6 +101,9 @@ export const roomRouter = createTRPCRouter({
         where: {
           id: roomId.toString(),
         },
+        include: {
+          users: true
+        }
       })
       if (!room) throw new TRPCError({ code: 'NOT_FOUND' })
       // console.log(await clerkApi.users.updateUser(auth.userId, {room:room.id}))
