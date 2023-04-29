@@ -17,7 +17,6 @@ export default withClerkMiddleware((request: NextRequest) => {
   }
   // if the user is not signed in redirect them to the sign in page.
   const { userId } = getAuth(request);
-
   if (userId && request.nextUrl.pathname === "/") {
     const dashUrl = new URL("/dash", request.url)
     return NextResponse.redirect(dashUrl)
@@ -29,6 +28,12 @@ export default withClerkMiddleware((request: NextRequest) => {
       return NextResponse.next()
     }
     // redirect the users to /pages/sign-in/[[...index]].ts
+    if (request.nextUrl.pathname === "/hello" && request.nextUrl.searchParams.get("inv")) {
+      const signInUrl = new URL("/sign-in", request.url);
+      signInUrl.searchParams.set("redirect_url", request.url);
+      return NextResponse.redirect(signInUrl);
+    }
+
     const signInUrl = new URL("/", request.url);
     return NextResponse.redirect(signInUrl);
   }

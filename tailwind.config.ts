@@ -5,10 +5,10 @@ export default {
   theme: {
     extend: {
       colors: {
-        bg:  "#0D0D0D"
+        bg: "#0D0D0D"
       }
 
     },
   },
-  plugins: [],
+  plugins: [require("daisyui")],
 } satisfies Config;

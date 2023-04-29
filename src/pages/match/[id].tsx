@@ -4,6 +4,8 @@ import { api, getBaseUrl } from '~/utils/api';
 import type { Cmatch, Match, Team, Vote } from '@prisma/client';
 import { useAuth } from '@clerk/clerk-react';
 import { getMatch } from '~/utils/cricket';
+import Link from 'next/link';
+import Head from 'next/head';
 type CmatchFull =
   | (Cmatch & {
       match: Match & {
@@ -138,9 +140,13 @@ const Match = () => {
   if (cmatchLoading) return <p>...Loading</p>;
   return (
     <div className="flex w-full grow flex-col items-center justify-between gap-[3vh] py-8 lg:max-w-[768px]">
+      <Head>
+        <title>{`${cmatch?.match.teams[0]?.shortName} v/s ${cmatch?.match.teams[1]?.shortName}`}</title>
+      </Head>
       <div className="flex w-full items-center justify-between px-4 py-2">
-        <span onClick={() => router.push('/dash')}>
+        <Link href="/dash">
           <svg
+            className="hover:cursor-pointer"
             width="44"
             height="19"
             viewBox="0 0 44 19"
@@ -154,7 +160,7 @@ const Match = () => {
               stroke-linecap="square"
             />
           </svg>
-        </span>
+        </Link>
         {cmatch?.match && (
           <p className="text-xl sm:text-2xl">
             {`${
@@ -224,15 +230,17 @@ const Match = () => {
             }`}</p>
           )
         ) : (
-          <p className="w-full bg-white py-2 text-center text-xl font-semibold text-black sm:py-4 sm:text-3xl">
-            {`You ${
-              cmatch?.votes
-                .filter((vote) => vote.userId === userId)
-                .some((vote) => vote.teamId === cmatch?.winnerId)
-                ? 'won'
-                : 'lost'
-            }`}
-          </p>
+          cmatch?.votes.some((vote) => vote.userId === userId) && (
+            <p className="w-full bg-white py-2 text-center text-xl font-semibold text-black sm:py-4 sm:text-3xl">
+              {`You ${
+                cmatch?.votes
+                  .filter((vote) => vote.teamId === cmatch?.winnerId)
+                  .some((vote) => vote.userId === userId)
+                  ? 'won'
+                  : 'lost'
+              }`}
+            </p>
+          )
         )}
       </div>
     </div>

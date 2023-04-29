@@ -1,16 +1,17 @@
 import { ClerkProvider } from '@clerk/nextjs';
-import type { AppProps } from 'next/app'
+import type { AppProps } from 'next/app';
 import { LayoutHelper } from '~/components/layout-helper';
 import { dark } from '@clerk/themes';
-import { api } from "~/utils/api";
-import "~/styles/globals.css";
-import Head from 'next/head'
+import { api } from '~/utils/api';
+import '~/styles/globals.css';
+import Head from 'next/head';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ClerkProvider {...pageProps} 
+    <ClerkProvider
+      {...pageProps}
       appearance={{
-        baseTheme: dark
+        baseTheme: dark,
       }}
     >
       <LayoutHelper>

@@ -1,7 +1,8 @@
 import React from 'react';
 import { SignedIn, UserButton, useAuth } from '@clerk/nextjs';
-
 import Link from 'next/link';
+// import { atom } from 'jotai';
+// export const drawerAtom = atom(false);
 
 const TopRightNav = () => {
   return (
