@@ -32,12 +32,6 @@ a {
   margin-block: 0 !important;
 }
 
-.muted-duotone-icon {
-  --fa-primary-color: theme('colors.red.500');
-  --fa-secondary-color: theme('colors.gray.200');
-  --fa-secondary-opacity: 1;
-}
-
 /*
  * Fancy scroll shadows
  * @see https://css-tricks.com/books/greatest-css-tricks/scroll-shadows/
@@ -78,61 +72,6 @@ a {
  */
 .break-words {
   word-break: break-word;
-}
-
-/* 
- * Stripped down version of the tippy animation so our tooltips fade
- */
-.tippy-box[data-animation='fade'][data-state='hidden'] {
-  opacity: 0;
-}
-
-.safari-video-overflow-fix {
-  mask-image: -webkit-radial-gradient(white, black);
-}
-
-@layer utilities {
-  @variants responsive {
-    .perspective {
-      transform: perspective(1500px) rotateY(-15deg);
-    }
-    .perspective-hero {
-      transform: perspective(1px) skewY(330deg);
-    }
-
-    .gradient-mask-hero {
-      mask-image: linear-gradient(to right, black, black, transparent);
-    }
-
-    .rechart-labels-visible .recharts-cartesian-axis-tick-value {
-      opacity: 1;
-    }
-    .rechart-labels-hidden .recharts-cartesian-axis-tick-value {
-      opacity: 0;
-    }
-  }
-
-  .ligatures-none {
-    font-variant-ligatures: none;
-  }
-}
-
-/* Loading spinner stuff */
-.spinner_ZCsl {
-  animation: spinner_qV4G 1.2s cubic-bezier(0.52, 0.6, 0.25, 0.99) infinite;
-}
-.spinner_gaIW {
-  animation-delay: 0.6s;
-}
-@keyframes spinner_qV4G {
-  0% {
-    r: 0;
-    opacity: 1;
-  }
-  100% {
-    r: 11px;
-    opacity: 0;
-  }
 }
 
 @layer components {
@@ -185,4 +124,40 @@ a {
 .bg-gray-800 {
   --tw-bg-opacity: 1;
   background-color: rgb(31 41 55 / var(--tw-bg-opacity));
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
+@font-face {
+  font-family: gilroy;
+  font-weight: 400;
+  src: url(https://notsattamedia.pages.dev/fonts/gr.ttf) format('truetype');
+}
+@font-face {
+  font-family: gilroy;
+  font-weight: 500;
+  src: url(https://notsattamedia.pages.dev/fonts/gm.ttf) format('truetype');
+}
+@font-face {
+  font-family: gilroy;
+  font-weight: 600;
+  src: url(https://notsattamedia.pages.dev/fonts/gsb.ttf) format('truetype');
+}
+@font-face {
+  font-family: gilroy;
+  font-weight: 700;
+  src: url(https://notsattamedia.pages.dev/fonts/gb.ttf) format('truetype');
+}
+@font-face {
+  font-family: cirka;
+  font-weight: 700;
+  src: url(https://notsattamedia.pages.dev/fonts/pb.otf) format('opentype');
+}
+
+@font-face {
+  font-family: cirka;
+  font-weight: 600;
+  src: url(https://notsattamedia.pages.dev/fonts/psb.ttf) format('truetype');
 }

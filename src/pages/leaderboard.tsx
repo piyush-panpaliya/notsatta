@@ -7,7 +7,7 @@ const Leaderboard = () => {
   const { data, isLoading } = api.room.leaderboardGet.useQuery();
   if (isLoading) return <LoadingPage />;
   return (
-    <div className="flex min-h-full w-full flex-col gap-8 pt-8 lg:w-[768px]">
+    <div className="flex min-h-full w-full flex-col gap-8 pt-8 font-gilroy font-medium lg:w-[768px]">
       <div className="flex w-full items-center justify-between">
         <Link href="/dash">
           <svg
@@ -29,7 +29,7 @@ const Leaderboard = () => {
         <p>Leaderboard</p>
       </div>
       <div className=" flex w-full flex-col gap-y-4 border-2 border-[#3D3D3D] pb-4 text-center">
-        <div className="flex w-full items-center justify-around  border-b-2 border-[#3D3D3D]  text-lg sm:text-xl">
+        <div className="flex w-full items-center justify-around  border-b-2 border-[#3D3D3D]  text-lg font-normal sm:text-xl">
           <p className="w-12 py-3 sm:w-16">#</p>
           <p className="grow border-l-2 border-r-2 border-[#3D3D3D] py-3">
             member

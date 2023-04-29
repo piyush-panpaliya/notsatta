@@ -16,7 +16,7 @@ export const SignInButton = () => {
           afterSignInUrl: '/dash',
         })
       }
-      className="text-md mt-[6vh] flex  w-[80vw] items-center justify-center gap-3 bg-white px-6 py-3 font-bold text-black sm:py-6 sm:text-3xl lg:w-auto lg:py-2.5 lg:text-2xl "
+      className="text-md mt-[6vh] flex  w-[80vw] items-center justify-center gap-3 bg-white px-6 py-3 font-gilroy font-bold  text-black sm:py-6 sm:text-3xl lg:w-auto lg:py-2.5 lg:text-2xl"
     >
       <svg
         className="h-6 sm:h-10 lg:h-6"
