@@ -42,8 +42,8 @@ const NewRoomDiv = ({
             <path
               d="M42.5001 9.5H0M0 9.5C4 9.5 9.50011 7 9.50011 1M0 9.5C4 9.5 9.50011 12.0002 9.50011 17.5002"
               stroke="white"
-              stroke-width="2"
-              stroke-linecap="square"
+              strokeWidth="2"
+              strokeLinecap="square"
             />
           </svg>
         </span>

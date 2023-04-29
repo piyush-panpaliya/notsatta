@@ -33,6 +33,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
       })
       //leaderboard update
+      const votes = await prisma.vote.findMany({
+        where: {
+          cmatch: {
+            matchId: fetchedMatch.id
+          }
+        },
+      })
+      console.log(votes)
+      const upVotes = votes.map((vote) => ({ ...vote, won: vote.teamId === fetchedMatch.winner }))
+      upVotes.forEach(async (vote) => {
+        await prisma.vote.update({
+          where: {
+            id: vote.id
+          },
+          data: {
+            won: vote.won
+          }
+        })
+      })
       return res.status(200).send('Match finished')
     }
   } catch (err) {

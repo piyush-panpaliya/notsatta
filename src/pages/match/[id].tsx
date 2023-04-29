@@ -7,6 +7,7 @@ import Link from 'next/link';
 import Head from 'next/head';
 import { LoadingPage, LoadingSpinner } from '~/components/loading';
 import { getColor } from '~/utils/colors';
+import { getMatchType } from '~/utils/cricket';
 
 type CmatchFull =
   | (Cmatch & {
@@ -74,7 +75,7 @@ const VoteBar = ({ cmatch }: { cmatch: CmatchFull }) => {
           className="h-full bg-[#005AA0]"
           style={{
             // @ts-expect-error
-            background: getColor(cmatch.match.teams[0]?.id),
+            background: getColor(cmatch.match.teams[1]?.id),
             width: `${
               (cmatch.votes.filter(
                 (vote) => vote.teamId === cmatch.match.teams[1]?.id
@@ -123,24 +124,36 @@ const Match = () => {
   } = api.match.getcmatch.useQuery({
     inpMatchId: matchId as string,
   });
+  const pollMatch = async () => {
+    if (!cmatch) return;
+    const response = await fetch('/api/getMatch', {
+      body: JSON.stringify({ id: cmatch?.match.link }),
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+    });
+    const ma = (await response.json()) as getMatchType;
+    if (
+      (ma.status == 'FINISHED' && cmatch.status !== 'FINISHED') ||
+      (ma.status == 'LIVE' && cmatch.status === 'OPEN')
+    ) {
+      fetch(`${getBaseUrl()}/api/cron/matchLive`, {
+        body: JSON.stringify(cmatch?.match),
+        method: 'POST',
+      });
+    }
+    setFmatch(ma);
+  };
+
   useEffect(() => {
     if (!cmatch?.match) return;
+    pollMatch();
     const id = setInterval(async () => {
-      const response = await fetch(cmatch?.match.link);
-      const ma = (await response.json()) as any;
-      if (
-        ma['match_status'] == 'post' ||
-        (ma['match_status'] == 'live' && cmatch.status === 'OPEN')
-      ) {
-        fetch(`${getBaseUrl()}/api/cron/matchLive`, {
-          body: JSON.stringify(cmatch?.match),
-          method: 'POST',
-        });
-      }
-      setFmatch(ma);
-    }, 5000);
+      await pollMatch();
+      refetch();
+    }, 2 * 60 * 1000);
     return () => clearInterval(id);
   }, [cmatch]);
+
   if (!matchId) return null;
   if (cmatchLoading) return <LoadingPage />;
   return (
@@ -161,8 +174,8 @@ const Match = () => {
             <path
               d="M42.5001 9.5H0M0 9.5C4 9.5 9.50011 7 9.50011 1M0 9.5C4 9.5 9.50011 12.0002 9.50011 17.5002"
               stroke="white"
-              stroke-width="2"
-              stroke-linecap="square"
+              strokeWidth="2"
+              strokeLinecap="square"
             />
           </svg>
         </Link>
@@ -204,15 +217,15 @@ const Match = () => {
           {/* voting info bar*/}
           <VoteBar cmatch={cmatch} />
           {/* more info of match */}
-          {fetchedMatch && fetchedMatch.match_status === 'live' && (
+          {fetchedMatch && fetchedMatch.status === 'LIVE' && (
             <div className="flex w-full flex-col gap-2 ">
               <p className="w-full text-xl  sm:text-2xl">score</p>
               <p className="w-full border-2 border-white py-2 text-center text-xl  sm:py-4 sm:text-2xl">
                 {fetchedMatch ? (
-                  fetchedMatch.score_strip[0].currently_batting ? (
-                    `${fetchedMatch.score_strip[0].short_name}  ${fetchedMatch.score_strip[0].score}`
+                  fetchedMatch.score[0].currently_batting ? (
+                    `${fetchedMatch.score[0].short_name}  ${fetchedMatch.score[0].score}`
                   ) : (
-                    `${fetchedMatch.score_strip[1].short_name}  ${fetchedMatch.score_strip[1].score}`
+                    `${fetchedMatch.score[1].short_name}  ${fetchedMatch.score[1].score}`
                   )
                 ) : (
                   <LoadingSpinner size={24} />

@@ -12,12 +12,10 @@
 
 import { getMatch } from './cricket';
 import matches from './matches';
-import { KVNamespace } from '@cloudflare/workers-types'
-
 
 export interface Env {
 	API_URL: string;
-	CRON_SECRET: string;
+
 	matchesKV: KVNamespace
 }
 
@@ -32,27 +30,19 @@ export default {
 		todayMatch.forEach(async (match) => {
 			const matchData = await getMatch(match.link)
 			console.log(matchData)
-			console.log(match.link)
-			if (matchData.status === 'LIVE') {
-				// if(matchData.status==='LIVE' && await env.matchesKV.get(match.id.toString())!=='LIVE'){
+			if (matchData.status === 'LIVE' && await env.matchesKV.get(match.id.toString()) !== 'LIVE') {
 				await fetch(env.API_URL, {
 					method: 'POST',
 					body: JSON.stringify({ link: matchData.link }),
-					headers: {
-						secret: env.CRON_SECRET,
-					}
 				})
+				await env.matchesKV.put(match.id.toString(), 'LIVE')
 			}
-			if (matchData.status === 'FINISHED') {
-				// if(matchData.status==='FINISHED' && await env.matchesKV.get(match.id.toString())!=='FINISHED'){)
+			if (matchData.status === 'FINISHED' && await env.matchesKV.get(match.id.toString()) !== 'FINISHED')
 				await fetch(env.API_URL, {
 					method: 'POST',
 					body: JSON.stringify({ link: matchData.link }),
-					headers: {
-						secret: env.CRON_SECRET,
-					}
 				})
-			}
+			await env.matchesKV.put(match.id.toString(), 'FINISHED')
 		})
 	},
 };

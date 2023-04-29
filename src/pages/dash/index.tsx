@@ -24,26 +24,36 @@ const MatchTab = ({ match }: { match: Cmatch }) => {
           }`}
         />
         <p className="text-sm  sm:text-lg">
-          {match.status === 'OPEN' ? 'vote now' : 'live now'}
+          {match.status === 'OPEN'
+            ? 'vote now'
+            : match.status === 'LIVE'
+            ? 'live now'
+            : 'Finished'}
         </p>
       </div>
     </Link>
   );
 };
 
-export const TeamNames = ({ teams }: { teams: Team[] }) => {
+const TeamNames = ({ teams }: { teams: Team[] }) => {
   return (
     <div className="flex grow items-center justify-between px-4  font-cirka font-bold sm:w-full sm:px-8">
       <div className="flex items-center gap-2 sm:flex-col sm:gap-4 ">
-        <img src={teams[0]?.flag} className=" w-8  sm:w-12" />
-        <p className="text-lg sm:text-3xl">{teams[0]?.shortName}</p>
+        <div className="flex h-8 w-8 items-center justify-center sm:h-12 sm:min-w-[6.5rem] ">
+          <img src={teams[0]?.flag} className="h-full" />
+        </div>
+        <p className="align-center text-lg sm:text-3xl">
+          {teams[0]?.shortName}
+        </p>
       </div>
       <p className="font-semibold sm:text-xl">v/s</p>
-      <div className=" flex gap-2 sm:flex-col-reverse sm:gap-4 ">
-        <p className="align-center text-lg  sm:text-3xl">
+      <div className=" flex items-center gap-2 sm:flex-col-reverse sm:gap-4">
+        <p className="align-center text-center text-lg  sm:text-3xl">
           {teams[1]?.shortName}
         </p>
-        <img src={teams[1]?.flag} className=" w-8 sm:w-12" />
+        <div className="align-center flex h-8 w-8 justify-center sm:h-12 sm:min-w-[6.5rem] ">
+          <img src={teams[1]?.flag} className=" h-full" />
+        </div>
       </div>
     </div>
   );
@@ -103,7 +113,7 @@ const Table = ({ matches }: PropMatches) => {
     <div className="flex w-full flex-col items-center border-2 border-[#8A8A8A] font-cirka font-semibold">
       <div className="mb-4 flex w-full items-center justify-around">
         <p
-          className={`w-1/2 border-b-2 border-r-2 border-[#8A8A8A] bg-black  py-4 text-center font-gilroy text-lg font-semibold  hover:cursor-pointer sm:text-2xl ${
+          className={`w-1/2 border-b-2 border-r-2 border-[#8A8A8A]   py-4 text-center font-gilroy text-lg font-semibold  hover:cursor-pointer sm:text-2xl ${
             state === 'upcoming' ? 'text-white ' : 'text-[#3D3D3D]'
           }`}
           onClick={() => setState('upcoming')}
@@ -111,7 +121,7 @@ const Table = ({ matches }: PropMatches) => {
           Upcoming Matches
         </p>
         <p
-          className={`w-1/2 border-b-2 border-[#8A8A8A]  bg-black  py-4 text-center font-gilroy text-lg font-semibold  hover:cursor-pointer sm:text-2xl ${
+          className={`w-1/2 border-b-2 border-[#8A8A8A]  py-4 text-center font-gilroy text-lg font-semibold  hover:cursor-pointer sm:text-2xl ${
             state === 'past' ? 'text-white ' : 'text-[#3D3D3D]'
           }`}
           onClick={() => setState('past')}
@@ -153,6 +163,7 @@ const Dash = ({ matches }: PropMatches) => {
     refetchOnWindowFocus: false,
   });
   useEffect(() => {
+    console.log(user);
     if (!isLoaded) return;
     if (!router.query?.nocheck) {
       if (
@@ -245,7 +256,7 @@ export async function getStaticProps() {
     props: {
       matches: matchAll,
     },
-    revalidate: 10 * 60 * 60,
+    revalidate: 3 * 60 * 60,
   };
 }
 
