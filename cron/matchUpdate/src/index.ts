@@ -13,7 +13,9 @@ export default {
 		ctx: ExecutionContext
 	): Promise<void> {
 		console.log(new Date().toDateString())
-		const todayMatch = matches.filter(match => match.startTime.toDateString() === new Date().toDateString());
+		const today = new Date()
+		today.setDate(today.getDate() + 1)
+		const todayMatch = matches.filter(match => match.startTime.toDateString() === today.toDateString());
 		const fetchedMatch = await Promise.all(todayMatch.map(async (match) => await getMatch(match.link)))
 		console.log(todayMatch)
 		console.log(env.API_URL)

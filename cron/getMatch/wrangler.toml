@@ -1,0 +1,5 @@
+name = "getmatch"
+main = "src/index.ts"
+compatibility_date = "2023-04-29"
+[vars]
+API_SECRET = "pshvaiophai?"

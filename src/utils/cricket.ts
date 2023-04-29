@@ -41,6 +41,7 @@ export const getMatch = async (link: string) => {
     slug: data.topic_slug as string,
     winner: winner,
     status: getStatus(data.match_status) as ReturnType<typeof getStatus>,
+    score: data.score_strip as any[]
   }
   return fetchedMatch;
 }

@@ -21,7 +21,7 @@ const Login = () => {
 
 export default function Home() {
   return (
-    <div className="z-0 flex w-full grow flex-col items-center justify-between pb-4 pt-16 sm:pb-8 lg:relative lg:overflow-hidden">
+    <div className=" z-0 flex w-full grow flex-col items-center justify-between pb-4 pt-16 sm:pb-8 lg:relative lg:overflow-hidden">
       <img
         src="https://notsattamedia.pages.dev/landing/waves.svg"
         className="absolute left-[-10px] top-[15vh] z-[-1]  w-[150vw] max-w-none opacity-30 sm:w-[110vw] lg:left-0  lg:h-auto lg:w-[110vw]"

@@ -21,8 +21,8 @@ const Leaderboard = () => {
             <path
               d="M42.5001 9.5H0M0 9.5C4 9.5 9.50011 7 9.50011 1M0 9.5C4 9.5 9.50011 12.0002 9.50011 17.5002"
               stroke="white"
-              stroke-width="2"
-              stroke-linecap="square"
+              strokeWidth="2"
+              strokeLinecap="square"
             />
           </svg>
         </Link>
@@ -38,7 +38,7 @@ const Leaderboard = () => {
         </div>
         <div className="flex w-full flex-col items-center justify-between gap-8 text-xl sm:text-2xl">
           {data?.map((user, n) => (
-            <div className="flex w-full items-center py-2">
+            <div key={n} className="flex w-full items-center py-2">
               <p className="w-12 sm:w-16">{n + 1}</p>
               <div className="justify-left flex grow items-center gap-4  pl-4 sm:gap-8">
                 <img src={user.image} className="h-8 w-8 " />
