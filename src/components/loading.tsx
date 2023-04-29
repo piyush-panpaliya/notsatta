@@ -1,17 +1,30 @@
-import React from "react";
+import React from 'react';
 
 const LoadingInternal = (props: { size?: number }) => {
-  const size = props.size ?? "24";
+  const size = props.size ?? '24';
   return (
     <svg
       width={size}
       height={size}
-      viewBox="0 0 24 24"
+      viewBox="0 0 38 38"
       xmlns="http://www.w3.org/2000/svg"
-      stroke="#cbd5e1"
+      stroke="#fff"
     >
-      <circle className="spinner_ZCsl" cx="12" cy="12" r="0" />
-      <circle className="spinner_ZCsl spinner_gaIW" cx="12" cy="12" r="0" />
+      <g fill="none" fill-rule="evenodd">
+        <g transform="translate(1 1)" stroke-width="2">
+          <circle stroke-opacity=".5" cx="18" cy="18" r="18" />
+          <path d="M36 18c0-9.94-8.06-18-18-18">
+            <animateTransform
+              attributeName="transform"
+              type="rotate"
+              from="0 18 18"
+              to="360 18 18"
+              dur="1s"
+              repeatCount="indefinite"
+            />
+          </path>
+        </g>
+      </g>
     </svg>
   );
 };
@@ -19,8 +32,8 @@ const LoadingInternal = (props: { size?: number }) => {
 export const LoadingSpinner = React.memo(LoadingInternal);
 
 const LoadingPageInternal = () => (
-  <div className="absolute flex top-0 right-0 h-screen w-screen items-center justify-center">
-    <LoadingInternal size={128} />
+  <div className="absolute right-0 top-0 flex h-screen w-screen items-center justify-center">
+    <LoadingInternal size={64} />
   </div>
 );
 

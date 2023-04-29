@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { prisma } from '~/server/db';
 import { api } from '~/utils/api';
 import Link from 'next/link';
+import { LoadingSpinner } from '~/components/loading';
 
 type PropMatches = { matches: { paMatches: Match[]; upMatches: Match[] } };
 
@@ -54,7 +55,7 @@ const LiveMatch = () => {
   const { data, isLoading } = api.match.getcmatches.useQuery(undefined, {
     refetchOnWindowFocus: false,
   });
-  if (isLoading) return <p>...Loading</p>;
+  if (isLoading) return <LoadingSpinner size={32} />;
   return (
     <div className="flex w-full flex-col items-center justify-center gap-3 text-center text-black sm:flex-row sm:gap-8">
       {data && data.map((match) => <MatchTab key={match.id} match={match} />)}
@@ -162,7 +163,7 @@ const Dash = ({ matches }: PropMatches) => {
   }, [user]);
 
   return (
-    <div className=" relative flex w-full grow flex-col items-center gap-16  pt-[5vh] sm:max-w-[768px]">
+    <div className=" relative flex w-full grow flex-col items-center gap-12 pt-[1vh] sm:max-w-[768px] sm:gap-16 sm:pt-[5vh]">
       <div className=" flex w-full items-center justify-between ">
         <p className="  text-2xl sm:text-5xl">{data?.name}</p>
         <Link href="/leaderboard" className="flex items-center gap-3 sm:gap-4">

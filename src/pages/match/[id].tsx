@@ -6,6 +6,7 @@ import { useAuth } from '@clerk/clerk-react';
 import { getMatch } from '~/utils/cricket';
 import Link from 'next/link';
 import Head from 'next/head';
+import { LoadingPage, LoadingSpinner } from '~/components/loading';
 type CmatchFull =
   | (Cmatch & {
       match: Match & {
@@ -50,7 +51,7 @@ const PutVote = ({ refetch, cmatch, vote }: any) => {
 
 const VoteBar = ({ cmatch }: { cmatch: CmatchFull }) => {
   const { data: room, isLoading: roomLoading } = api.room.get.useQuery();
-  if (roomLoading || !cmatch) return <p>...Loading</p>;
+  if (roomLoading || !cmatch) return <LoadingSpinner />;
   return (
     <div className="flex w-full flex-col items-center gap-4">
       <div className="flex h-[4vh] w-full items-center justify-between bg-slate-600">
@@ -137,7 +138,7 @@ const Match = () => {
     return () => clearInterval(id);
   }, [cmatch]);
   if (!matchId) return null;
-  if (cmatchLoading) return <p>...Loading</p>;
+  if (cmatchLoading) return <LoadingPage />;
   return (
     <div className="flex w-full grow flex-col items-center justify-between gap-[3vh] py-8 lg:max-w-[768px]">
       <Head>
@@ -203,11 +204,15 @@ const Match = () => {
             <div className="flex w-full flex-col gap-2 ">
               <p className="w-full text-xl font-semibold sm:text-2xl">score</p>
               <p className="w-full border-2 border-white py-2 text-center text-xl font-semibold sm:py-4 sm:text-2xl">
-                {fetchedMatch
-                  ? fetchedMatch.score_strip[0].currently_batting
-                    ? `${fetchedMatch.score_strip[0].short_name}  ${fetchedMatch.score_strip[0].score}`
-                    : `${fetchedMatch.score_strip[1].short_name}  ${fetchedMatch.score_strip[1].score}`
-                  : '...Loading'}
+                {fetchedMatch ? (
+                  fetchedMatch.score_strip[0].currently_batting ? (
+                    `${fetchedMatch.score_strip[0].short_name}  ${fetchedMatch.score_strip[0].score}`
+                  ) : (
+                    `${fetchedMatch.score_strip[1].short_name}  ${fetchedMatch.score_strip[1].score}`
+                  )
+                ) : (
+                  <LoadingSpinner size={24} />
+                )}
               </p>
             </div>
           )}

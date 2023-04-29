@@ -1,6 +1,7 @@
 import React from 'react';
 import { SignedIn, UserButton, useAuth } from '@clerk/nextjs';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 // import { atom } from 'jotai';
 // export const drawerAtom = atom(false);
 
@@ -24,54 +25,52 @@ const TopRightNav = () => {
   );
 };
 
-export const LayoutHelper = ({
-  children,
-  slug,
-}: {
-  children: React.ReactNode;
-  slug?: string;
-}) => {
+export const LayoutHelper = ({ children }: { children: React.ReactNode }) => {
   const { userId } = useAuth();
+  const router = useRouter();
+  console.log(router?.pathname);
   return (
     <div className="relative flex min-h-screen w-screen flex-col items-center gap-4 overflow-hidden pb-8 pl-8  pr-4 pt-4 sm:pl-12  sm:pr-6 sm:pt-10 ">
       {/* Header */}
-      <div className=" flex h-16 w-full items-center justify-between  ">
-        <Link href={userId ? '/dash' : '/'} className="text-2xl sm:text-5xl">
-          ~Satta
-        </Link>
-        <div className="flex items-center gap-5 sm:gap-8">
-          <SignedIn>
-            <TopRightNav />
-          </SignedIn>
-          <button>
-            <svg
-              className="h-5 sm:h-8"
-              viewBox="0 0 52 39"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M2 2H50"
-                stroke="white"
-                strokeWidth="3.49326"
-                strokeLinecap="round"
-              />
-              <path
-                d="M2 37.0001H50"
-                stroke="white"
-                strokeWidth="3.49326"
-                strokeLinecap="round"
-              />
-              <path
-                d="M9.99951 19.5001H49.9995"
-                stroke="white"
-                strokeWidth="3.49326"
-                strokeLinecap="round"
-              />
-            </svg>
-          </button>
+      {['/', '/hello', '/dash'].includes(router?.pathname) && (
+        <div className=" flex h-16 w-full items-center justify-between  ">
+          <Link href={userId ? '/dash' : '/'} className="text-2xl sm:text-5xl">
+            ~Satta
+          </Link>
+          <div className="flex items-center gap-5 sm:gap-8">
+            <SignedIn>
+              <TopRightNav />
+            </SignedIn>
+            <button>
+              <svg
+                className="h-5 sm:h-8"
+                viewBox="0 0 52 39"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M2 2H50"
+                  stroke="white"
+                  strokeWidth="3.49326"
+                  strokeLinecap="round"
+                />
+                <path
+                  d="M2 37.0001H50"
+                  stroke="white"
+                  strokeWidth="3.49326"
+                  strokeLinecap="round"
+                />
+                <path
+                  d="M9.99951 19.5001H49.9995"
+                  stroke="white"
+                  strokeWidth="3.49326"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Content */}
       {children}

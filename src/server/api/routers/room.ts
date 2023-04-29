@@ -141,7 +141,6 @@ export const roomRouter = createTRPCRouter({
         points: user.votes.filter(vote => vote.won).length,
         image: (await clerkClient.users.getUser(user.id)).profileImageUrl
       })))
-      console.log(leaderboard)
       return leaderboard.sort((a, b) => b.points - a.points)
     })
 });
