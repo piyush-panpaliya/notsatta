@@ -20,10 +20,10 @@ export const matchRouter = createTRPCRouter({
       })
       if (!room) throw new TRPCError({ code: 'NOT_FOUND' })
       const today = new Date()
-      today.setHours(14, 0, 0, 0);
+      today.setHours(0, 0, 0, 0);
       const tomorrow = new Date()
       tomorrow.setDate(tomorrow.getDate() + 1)
-      tomorrow.setHours(14, 0, 0, 0);
+      tomorrow.setHours(1, 0, 0, 0);
       const cmatches = await prisma.cmatch.findMany({
         where: {
           roomId: room.id,

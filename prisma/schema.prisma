@@ -22,11 +22,12 @@ model Room {
   updatedAt DateTime @updatedAt
   cmatches  Cmatch[]
   users     User[]
+  votes     Vote[]
 }
 
 model User {
   id       String  @id
-  username String
+  username String  @unique
   room     Room?   @relation(fields: [roomId], references: [id], onDelete: SetNull)
   roomId   String?
   votes    Vote[]
@@ -59,10 +60,13 @@ model Vote {
   userId   String
   cmatch   Cmatch @relation(fields: [cmatchId], references: [id], onDelete: Cascade)
   cmatchId String
+  room     Room   @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  roomId   String
   teamId   Int
   won      Boolean?
 
   @@index([userId])
+  @@index([roomId ])
   @@index([cmatchId])
   @@index([teamId])
 }

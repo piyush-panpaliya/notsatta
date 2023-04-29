@@ -75,10 +75,9 @@ export const roomRouter = createTRPCRouter({
       return room
     }),
   leave: protectedProcedure
-    .input(z.object({ slug: z.string().refine(Base64.isValid) }))
-    .mutation(async ({ input, ctx: { auth, prisma } }) => {
-      if (!(auth.user?.publicMetadata?.room)) throw new TRPCError({ code: 'FORBIDDEN' })
-      const roomId = Buffer.from(input.slug, 'base64').toString()
+    .mutation(async ({ ctx: { auth, prisma } }) => {
+      const roomId = (await clerkClient.users.getUser(auth.userId)).publicMetadata?.room as string
+      if (!roomId) throw new TRPCError({ code: 'FORBIDDEN' })
       const room = await prisma.room.findUnique({
         where: {
           id: roomId,
@@ -86,7 +85,7 @@ export const roomRouter = createTRPCRouter({
         select: { id: true }
       })
       if (!room) throw new TRPCError({ code: 'NOT_FOUND' })
-      console.log(await clerkClient.users.updateUser(auth.userId, { publicMetadata: { room: room.id } }))
+      console.log(await clerkClient.users.updateUser(auth.userId, { publicMetadata: { room: null } }))
       await prisma.user.update({
         where: { id: auth.userId },
         data: { roomId: null }
@@ -108,6 +107,40 @@ export const roomRouter = createTRPCRouter({
       if (!room) throw new TRPCError({ code: 'NOT_FOUND' })
       // console.log(await clerkApi.users.updateUser(auth.userId, {room:room.id}))
       return room
+    }),
+  leaderboardGet: protectedProcedure
+    .query(async ({ ctx: { auth, prisma } }) => {
+      const roomId = (await clerkClient.users.getUser(auth.userId)).publicMetadata?.room as string | undefined
+      if (!roomId) throw new TRPCError({ code: 'FORBIDDEN' })
+      const room = await prisma.room.findUnique({
+        where: {
+          id: roomId.toString(),
+        },
+        include: {
+          users: true
+        }
+      })
+      if (!room) throw new TRPCError({ code: 'NOT_FOUND' })
+      const users = await prisma.user.findMany({
+        where: {
+          roomId: room.id,
+          votes: {
+            some: {
+              roomId: room.id
+            }
+          }
+        },
+        include: {
+          votes: true,
+        },
+      })
+      const leaderboard = await Promise.all(users.map(async (user) => ({
+        id: user.id,
+        username: user.username,
+        points: user.votes.filter(vote => vote.won).length,
+        image: (await clerkClient.users.getUser(user.id)).profileImageUrl
+      })))
+      return leaderboard.sort((a, b) => b.points - a.points)
     })
 });
 

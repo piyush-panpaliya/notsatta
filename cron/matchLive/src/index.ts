@@ -35,9 +35,9 @@ export default {
 			console.log(match.link)
 			if (matchData.status === 'LIVE') {
 				// if(matchData.status==='LIVE' && await env.matchesKV.get(match.id.toString())!=='LIVE'){
-				fetch(env.API_URL, {
+				await fetch(env.API_URL, {
 					method: 'POST',
-					body: JSON.stringify(matchData),
+					body: JSON.stringify({ link: matchData.link }),
 					headers: {
 						secret: env.CRON_SECRET,
 					}
@@ -45,9 +45,9 @@ export default {
 			}
 			if (matchData.status === 'FINISHED') {
 				// if(matchData.status==='FINISHED' && await env.matchesKV.get(match.id.toString())!=='FINISHED'){)
-				fetch(env.API_URL, {
+				await fetch(env.API_URL, {
 					method: 'POST',
-					body: JSON.stringify(matchData),
+					body: JSON.stringify({ link: matchData.link }),
 					headers: {
 						secret: env.CRON_SECRET,
 					}

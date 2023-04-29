@@ -12,15 +12,17 @@ export default {
 		env: Env,
 		ctx: ExecutionContext
 	): Promise<void> {
+		console.log(new Date().toDateString())
 		const todayMatch = matches.filter(match => match.startTime.toDateString() === new Date().toDateString());
 		const fetchedMatch = await Promise.all(todayMatch.map(async (match) => await getMatch(match.link)))
-		fetch(env.API_URL, {
+		console.log(todayMatch)
+		console.log(env.API_URL)
+		await fetch(env.API_URL, {
 			method: 'POST',
-			body: JSON.stringify(fetchedMatch),
+			body: JSON.stringify(fetchedMatch.map(match => ({ id: match.id }))),
 			headers: {
 				secret: env.CRON_SECRET,
 			}
 		})
-		console.log(JSON.stringify(fetchedMatch))
 	},
 }; 
