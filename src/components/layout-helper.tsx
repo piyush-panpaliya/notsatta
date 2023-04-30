@@ -341,7 +341,7 @@ export const Drawer = ({ setOpen }: any) => {
             />
             <path
               fillRule="evenodd"
-              clip-rule="evenodd"
+              clipRule="evenodd"
               d="M15.8124 25.1538C16.4867 25.3723 17.2086 24.9922 17.4101 24.3126L22.2833 7.87666C22.514 7.09855 22.0898 6.27698 21.3219 6.01451L7.83496 1.40526C7.01797 1.12604 6.13332 1.58587 5.89241 2.41496L1.04818 19.0861C0.858021 19.7405 1.22221 20.4276 1.87055 20.6376L15.8124 25.1538Z"
               fill="#0D0D0D"
             />
@@ -472,7 +472,7 @@ export const LayoutHelper = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   return (
-    <div className="relative flex min-h-screen w-screen flex-col items-center gap-4 overflow-hidden pb-8 pl-8  pr-4 pt-4 sm:pl-12  sm:pr-6 sm:pt-10">
+    <div className="relative flex min-h-screen w-screen flex-col items-center gap-4 overflow-hidden pb-8  pl-8 pr-4 pt-4  sm:pl-12 sm:pr-6 sm:pt-10">
       {/* Header */}
       {['/', '/hello', '/dash'].includes(router?.pathname) && (
         <div className=" flex h-16 w-full items-center justify-between  ">
@@ -509,38 +509,40 @@ export const LayoutHelper = ({ children }: { children: React.ReactNode }) => {
               />
             </svg>
           </Link>
-          <div className="flex items-center gap-5 sm:gap-8">
-            <SignedIn>
-              <button onClick={() => setOpen(true)}>
-                {open && <Drawer setOpen={setOpen} />}
-                <svg
-                  className="h-5 sm:h-8"
-                  viewBox="0 0 52 39"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M2 2H50"
-                    stroke="white"
-                    strokeWidth="3.49326"
-                    strokeLinecap="round"
-                  />
-                  <path
-                    d="M2 37.0001H50"
-                    stroke="white"
-                    strokeWidth="3.49326"
-                    strokeLinecap="round"
-                  />
-                  <path
-                    d="M9.99951 19.5001H49.9995"
-                    stroke="white"
-                    strokeWidth="3.49326"
-                    strokeLinecap="round"
-                  />
-                </svg>
-              </button>
-            </SignedIn>
-          </div>
+          {router.pathname !== '/hello' && (
+            <div className="flex items-center gap-5 sm:gap-8">
+              <SignedIn>
+                <button onClick={() => setOpen(true)}>
+                  {open && <Drawer setOpen={setOpen} />}
+                  <svg
+                    className="h-5 sm:h-8"
+                    viewBox="0 0 52 39"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M2 2H50"
+                      stroke="white"
+                      strokeWidth="3.49326"
+                      strokeLinecap="round"
+                    />
+                    <path
+                      d="M2 37.0001H50"
+                      stroke="white"
+                      strokeWidth="3.49326"
+                      strokeLinecap="round"
+                    />
+                    <path
+                      d="M9.99951 19.5001H49.9995"
+                      stroke="white"
+                      strokeWidth="3.49326"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                </button>
+              </SignedIn>
+            </div>
+          )}
         </div>
       )}
       {open && (

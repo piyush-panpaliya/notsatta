@@ -8,15 +8,16 @@ export const userRouter = createTRPCRouter({
     .input(z.object({ username: z.string().min(2).max(15) }))
     .mutation(async ({ input, ctx: { auth, prisma } }) => {
       // if ((await clerkClient.users.getUser(auth.userId)).publicMetadata?.username) throw new TRPCError({ code: 'FORBIDDEN', message: 'Username cannot be changed' })
+
+      await prisma.user.upsert({
+        where: { id: auth.userId },
+        update: { username: input.username },
+        create: { id: auth.userId, username: input.username }
+      })
       const user = await clerkClient.users.updateUserMetadata(auth.userId, {
         publicMetadata: {
           username: input.username
         }
-      })
-      await prisma.user.upsert({
-        where: { id: user.id },
-        update: { username: input.username },
-        create: { id: auth.userId, username: user.publicMetadata.username as string }
       })
     }),
 })

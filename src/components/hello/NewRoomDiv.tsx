@@ -29,9 +29,9 @@ const NewRoomDiv = ({
     setIsChecked(event.target.checked);
   };
   return (
-    <div className="mt-10 flex h-full w-full grow flex-col items-center justify-between pb-[20vh] sm:mt-[10vh]">
+    <div className="mt-8 flex h-full w-full grow flex-col items-center justify-between pb-[20vh] ">
       <div className=" flex w-full  flex-col gap-6  sm:gap-10 ">
-        <span onClick={() => setScreen('RoomDiv')}>
+        <span className="" onClick={() => setScreen('RoomDiv')}>
           <svg
             width="44"
             height="19"
@@ -58,7 +58,7 @@ const NewRoomDiv = ({
           onChange={(e: any) => setRoomName(e.target.value)}
           style={{
             border: '1px solid white',
-            padding: '1rem 1rem 1rem 1rem',
+            padding: '0.8rem 1rem 1rem 0.8rem',
           }}
           textStyle={{
             label: { fontSize: 15, fontType: 'heading', fontWeight: 400 },

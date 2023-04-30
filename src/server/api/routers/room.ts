@@ -26,7 +26,7 @@ export const roomRouter = createTRPCRouter({
         update: { roomId: newuser.publicMetadata.room as string },
         create: { id: auth.userId, roomId: newuser.publicMetadata.room as string, username: "user" }
       })
-      const todayMatch = matches.filter(match => match.startTime.toDateString() === new Date().toDateString());
+      const todayMatch = matches.filter(match => match.startTime.toDateString() === new Date(Date.now() + 5.5 * 3600 * 1000).toDateString());
       const fetchedMatch = await Promise.all(todayMatch.map(async (match) => await getMatch(match.link)))
       console.log(fetchedMatch)
       await fetch(`${getBaseUrl()}/api/cron/updateMatchList`, {

@@ -11,7 +11,6 @@ export const matchRouter = createTRPCRouter({
     .query(async ({ ctx: { auth, prisma } }) => {
       const user = await clerkClient.users.getUser(auth.userId)
       if (!user.publicMetadata?.room) throw new TRPCError({ code: 'FORBIDDEN' })
-      console.log(user.publicMetadata?.room)
       const room = await prisma.room.findUnique({
         where: {
           id: user.publicMetadata?.room as string,
@@ -19,21 +18,17 @@ export const matchRouter = createTRPCRouter({
         select: { id: true, name: true }
       })
       if (!room) throw new TRPCError({ code: 'NOT_FOUND' })
-      const today = new Date()
-      today.setHours(0, 0, 0, 0);
-      const tomorrow = new Date()
+      const today = new Date(Date.now() + 5.5 * 60 * 60 * 1000)
+      today.setUTCHours(1, 0, 0, 0);
+      const tomorrow = new Date(Date.now() + 5.5 * 60 * 60 * 1000)
       tomorrow.setDate(tomorrow.getDate() + 1)
-      tomorrow.setHours(1, 0, 0, 0);
+      tomorrow.setUTCHours(1, 0, 0, 0);
       const cmatches = await prisma.cmatch.findMany({
         where: {
           roomId: room.id,
-          OR: [
-            { status: 'OPEN' },
-            { status: "LIVE" },
-          ],
           AND: [
-            { match: { startTime: { gte: today } } },
-            { match: { startTime: { lte: tomorrow } } },
+            { match: { startTime: { gt: today } } },
+            { match: { startTime: { lt: tomorrow } } },
           ]
         },
         include: {

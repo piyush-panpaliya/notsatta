@@ -220,8 +220,10 @@ const Match = () => {
           {fetchedMatch && fetchedMatch.status === 'LIVE' && (
             <div className="flex w-full flex-col gap-2 ">
               <p className="w-full text-xl  sm:text-2xl">score</p>
-              <p className="w-full border-2 border-white py-2 text-center text-xl  sm:py-4 sm:text-2xl">
+              <p className="w-full border-2 border-white py-2 text-center text-xl font-normal  tracking-wider sm:py-4 sm:text-2xl">
                 {fetchedMatch ? (
+                  // (fetchedMatch.score[0].currently_batting ||
+                  // fetchedMatch.score[1].currently_batting) &&
                   fetchedMatch.score[0].currently_batting ? (
                     `${fetchedMatch.score[0].short_name}  ${fetchedMatch.score[0].score}`
                   ) : (

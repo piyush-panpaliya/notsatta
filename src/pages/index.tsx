@@ -5,14 +5,14 @@ import React from 'react';
 
 const Login = () => {
   return (
-    <div className="flex flex-col items-start text-center">
+    <div className="flex flex-col items-start text-center tracking-wide text-[#8A8A8A]">
       <SignedOut>
         <SignInButton />
       </SignedOut>
-      <p className="text-md mt-6 w-auto font-gilroy opacity-50 sm:mt-8 sm:w-full sm:text-2xl lg:mt-4">
+      <p className="text-md mt-6 w-auto font-gilroy  sm:mt-8 sm:w-full sm:text-2xl lg:mt-4">
         "JEE se bada satta kuch nhi"
       </p>
-      <p className="text-md w-auto font-gilroy opacity-50 sm:w-full sm:text-2xl">
+      <p className="text-md w-auto font-gilroy  sm:w-full sm:text-2xl">
         -aristotle
       </p>
     </div>
@@ -24,7 +24,7 @@ export default function Home() {
     <div className=" z-0 flex w-full grow flex-col items-center justify-between pb-4 pt-16 sm:pb-8 lg:relative lg:overflow-hidden">
       <img
         src="https://notsattamedia.pages.dev/landing/waves.svg"
-        className="absolute left-[-10px] top-[15vh] z-[-1]  w-[150vw] max-w-none opacity-30 sm:w-[110vw] lg:left-0  lg:h-auto lg:w-[110vw]"
+        className="absolute left-[-10px] top-[15vh] z-[-1]  w-[150vw] max-w-none opacity-20 sm:w-[110vw] lg:left-0  lg:h-auto lg:w-[110vw]"
       />
 
       <div className=" flex w-full grow flex-col items-center gap-8 lg:-mt-[15rem] lg:flex-row">

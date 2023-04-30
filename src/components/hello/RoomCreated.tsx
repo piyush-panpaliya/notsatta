@@ -1,6 +1,6 @@
 import { useUser } from '@clerk/clerk-react';
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const RoomCreated = ({
   setScreen,
@@ -20,6 +20,7 @@ const RoomCreated = ({
       setScreen('RoomDiv');
     }
   }, [user]);
+  const [copied, setCopied] = useState(false);
   return (
     <div className="mt-10 flex h-full w-full grow flex-col items-center justify-between pb-[20vh] sm:mt-[10vh]">
       <div className=" flex w-full  flex-col gap-6  sm:gap-10 ">
@@ -30,12 +31,16 @@ const RoomCreated = ({
       </div>
       <div className="flex w-full flex-col items-center gap-4 sm:gap-8 ">
         <button
+          disabled={copied}
           onClick={() => {
             navigator.clipboard.writeText(
               `https://${document.location.host}/hello?inv=${roomResponse.roomInv}`
             );
+            setCopied(true);
           }}
-          className="text-md flex w-full   items-center justify-center gap-3 border-2 border-white bg-black px-6 py-3 font-normal text-white sm:py-6 sm:text-3xl lg:w-auto lg:py-2.5 lg:text-2xl"
+          className={`text-md flex w-full   items-center justify-center gap-3 border-2 border-white bg-black px-6 py-3 font-normal text-white sm:py-6 sm:text-3xl lg:w-auto lg:py-2.5 lg:text-2xl ${
+            copied && 'opacity-50'
+          }`}
         >
           <svg
             className="w-8"
@@ -62,7 +67,7 @@ const RoomCreated = ({
             />
           </svg>
 
-          <p>copy link</p>
+          <p>{copied ? 'copied!' : 'copy link'}</p>
         </button>
         <button
           onClick={() =>

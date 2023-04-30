@@ -41,7 +41,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         },
       })
       console.log(votes)
-      const upVotes = votes.map((vote) => ({ ...vote, won: vote.teamId === fetchedMatch.winner }))
+      const upVotes = votes.map((vote) => ({ ...vote, won: vote.teamId == fetchedMatch.winner }))
+      console.log("upVotes", upVotes)
       upVotes.forEach(async (vote) => {
         await prisma.vote.update({
           where: {
