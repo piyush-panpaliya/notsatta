@@ -34,6 +34,7 @@ const UsernameDiv = ({ nextScreen }: { nextScreen: any }) => {
             style={{
               border: '1px solid white',
               padding: '0.75rem 1rem 0.75rem 1rem',
+              backgroundColor: '#0D0D0D',
             }}
             textStyle={{
               label: { fontSize: 15, fontType: 'heading', fontWeight: 400 },

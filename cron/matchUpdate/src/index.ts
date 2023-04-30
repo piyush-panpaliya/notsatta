@@ -12,13 +12,11 @@ export default {
 		env: Env,
 		ctx: ExecutionContext
 	): Promise<void> {
-		console.log(new Date().toDateString())
-		const today = new Date()
-		today.setDate(today.getDate() + 1)
+		const today = new Date(Date.now() + (5.5 * 60 * 60 * 1000))
+		console.log(today.toDateString())
 		const todayMatch = matches.filter(match => match.startTime.toDateString() === today.toDateString());
 		const fetchedMatch = await Promise.all(todayMatch.map(async (match) => await getMatch(match.link)))
-		console.log(todayMatch)
-		console.log(env.API_URL)
+		console.log("adding this match to cmatch", todayMatch)
 		await fetch(env.API_URL, {
 			method: 'POST',
 			body: JSON.stringify(fetchedMatch.map(match => ({ id: match.id }))),

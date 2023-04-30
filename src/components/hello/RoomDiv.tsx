@@ -35,8 +35,7 @@ const RoomDiv = ({
         >
           <div className="flex gap-4">
             <svg
-              width="45"
-              height="45"
+              className="w-5 sm:w-8"
               viewBox="0 0 45 45"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -47,10 +46,9 @@ const RoomDiv = ({
               />
             </svg>
 
-            <p className=" text-2xl  sm:text-4xl">create new room</p>
+            <p className=" text-lg  sm:text-4xl">create new room</p>
             <svg
-              width="45"
-              height="45"
+              className="w-5 sm:w-8"
               viewBox="0 0 45 45"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -78,16 +76,17 @@ const RoomDiv = ({
             onChange={(e: any) => roomState.setRoomName(e.target.value)}
             style={{
               border: '1px solid white',
-              padding: '1rem 1rem 1rem 1rem',
+              padding: '0.8rem 1rem 1rem 0.8rem',
+              backgroundColor: '#0D0D0D',
             }}
             textStyle={{
               label: { fontSize: 15, fontType: 'heading', fontWeight: 400 },
-              input: { fontSize: 30, fontType: 'heading', fontWeight: 400 },
+              input: { fontSize: 25, fontType: 'heading', fontWeight: 400 },
             }}
             colorConfig={{
               labelColor: 'white',
               errorColor: '#EE4D37',
-              placeholderColor: '#3D3D3D',
+              placeholderColor: 'white',
             }}
             hasError={!!error}
             isDisabled={isLoading}
@@ -110,7 +109,7 @@ const RoomDiv = ({
         spacingConfig={{ padding: '1rem 0 1rem 0' }}
         disabled={isLoading || roomState.roomName.length < 2}
       >
-        <p className="text-2xl sm:text-4xl">continue</p>
+        <p className="text-lg sm:text-4xl">continue</p>
       </Button>
     </div>
   );
