@@ -1117,17 +1117,17 @@ const teams = [
   },
 ];
 
-teams.forEach(async (item) => {
-  const data = await a.team.update({
-    where: {
-      id: parseInt(item.id),
-    },
-    data: {
-      flag: item.flag,
-    },
-  });
-  console.log(data);
-});
+// teams.forEach(async (item) => {
+//   const data = await a.team.update({
+//     where: {
+//       id: parseInt(item.id),
+//     },
+//     data: {
+//       flag: item.flag,
+//     },
+//   });
+//   console.log(data);
+// });
 
 // var fs = require('fs');
 // let abc=[]
@@ -1145,16 +1145,15 @@ teams.forEach(async (item) => {
 // console.log(new Date().toDateString())
 // const adawd = async () => {
 //   console.log(
-//     await a.cmatch.create({
-//       data: {
-//         matchId: 60937,
-//         roomId: 'clghyxxsl0000vktw8rjol5ow',
+//     await a.user.findMany({
+//       where: {
+//         roomId: 'clh2hjkbe0000lf08yapkgid1',
 //       },
 //     })
 //   );
 // };
 
-// adawd()
+adawd();
 // console.log(
 //   teams.map((item) => ({
 //     ...item,

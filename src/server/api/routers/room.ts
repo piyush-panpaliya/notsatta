@@ -7,6 +7,44 @@ import matches from '~/utils/matches'
 import { getBaseUrl } from "~/utils/api";
 import { getMatch } from "~/utils/cricket";
 
+const findPoints = (id: string) => {
+  const roomUser = [
+    {
+      id: 'user_2P7L978F3fR68Kq5X3E3uAZkxm5',
+      score: 0
+    },
+    {
+      id: 'user_2P7LURqI1lbk1TVKzpdnsfEvslt',
+      score: 0
+    },
+    {
+      id: 'user_2P8ejCnyJFDms0EPQscWFvqRTP8',
+      score: 0
+    },
+    {
+      id: 'user_2P8fAfOmLwJl6Vq5hA5ZIejHEkX',
+      score: 0
+    },
+    {
+      id: 'user_2P8if0ySNJ0lU6Ty1sqiel3PKcR',
+      score: 0
+    },
+    {
+      id: 'user_2P8lBijfQjuf50Z6tT6uJq3PlRq',
+      score: 0
+    },
+    {
+      id: 'user_2P8lderXnWCe9rDtC8ZJd45nWEb',
+      score: 0
+    },
+    {
+      id: 'user_2PEFlYZ3iYUI8rPO6rqKAX4AwMB',
+      score: 0
+    }
+  ]
+  return roomUser.find(user => user.id === id)?.score || 0
+}
+
 export const roomRouter = createTRPCRouter({
   create: protectedProcedure
     .input(z.object({ roomName: z.string().min(2).max(15) }))
@@ -140,6 +178,12 @@ export const roomRouter = createTRPCRouter({
         points: user.votes.filter(vote => vote.won).length,
         image: (await clerkClient.users.getUser(user.id)).profileImageUrl
       })))
+      if (room.id === "clh2hjkbe0000lf08yapkgid1") {
+        const leaderboardNew = leaderboard.map((user) => {
+          return { ...user, points: user.points + findPoints(user.id) }
+        })
+        return leaderboardNew.sort((a, b) => b.points - a.points)
+      }
       return leaderboard.sort((a, b) => b.points - a.points)
     })
 });
